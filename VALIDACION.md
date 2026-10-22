@@ -34,3 +34,9 @@ No se registraron errores de JavaScript durante ese recorrido. Se inspeccionaron
 - Dockerfile y Compose están incluidos. No se ejecutó la construcción Docker en este entorno porque no dispone de Docker; la Action preparada incluye esa comprobación al subir el proyecto.
 - La Action se proporciona como código. Aún no se ha ejecutado en un repositorio de GitHub nuevo.
 - No se ha desplegado la tienda en un hosting público ni se ha creado un repositorio.
+
+
+## Scripts de prueba de consola (Frontend)
+
+- `pruebas/carrito-confirmacion.js`: verifica el vaciado del carrito tras confirmación y la persistencia en `localStorage`.
+- `pruebas/carrito-cancelacion.js`: comprueba que cancelar la operación conserve intactos los productos, cantidades y total.
