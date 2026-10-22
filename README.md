@@ -1,8 +1,99 @@
-# PixelVault — tienda de videojuegos sin MySQL
+<div align="center">
 
-Proyecto académico basado en el avance original de PixelVault. Backend Java 17 + Spring Boot 3.3.4 y frontend HTML, CSS y JavaScript. Guarda videojuegos, cuentas y pedidos en archivos JSON. No utiliza Scala, Prolog, JPA, MySQL ni una base de datos en memoria.
+# 🎮 PixelVault
+### Tu próxima aventura empieza aquí
 
-## Ejecutar en Windows / VS Code
+Tienda web académica de videojuegos digitales con catálogo, carrito, cuentas de usuario y compras de demostración.
+
+**Explora · Agrega al carrito · Inicia sesión · Simula tu compra**
+
+[🚀 Instalación](#-puesta-en-marcha) · [🛒 Funcionalidades](#-qué-puedes-hacer) · [👥 Equipo](#-equipo-y-responsabilidades) · [🌿 Colaboración](#-cómo-trabajamos)
+
+</div>
+
+---
+
+## 📌 ¿De qué trata nuestra página?
+
+**PixelVault** permite explorar videojuegos, consultar sus características y precios, preparar un carrito y completar una compra simulada. También incluye un panel para que el administrador gestione el catálogo, las existencias y consulte los pedidos.
+
+El proyecto sirve para practicar el desarrollo de una aplicación web completa: interfaz, API REST, autenticación, persistencia y trabajo colaborativo con GitHub.
+
+> 💳 **Los pagos son de demostración:** no se cobra dinero ni se entregan licencias reales. Se pueden probar operaciones aprobadas y rechazadas.
+
+## 🛒 ¿Qué puedes hacer?
+
+| Área | Funciones actuales |
+| --- | --- |
+| 🎮 Catálogo público | Buscar por título o plataforma, filtrar por género, ordenar precios y consultar detalles. |
+| 🛍️ Carrito | Agregar juegos, ajustar cantidades, eliminar productos y consultar el total sin iniciar sesión. |
+| 🔐 Cuenta de cliente | Registrarse e iniciar sesión por correo. Para continuar al pago se requiere una sesión. |
+| 💳 Compra simulada | Elegir tarjeta o Yape de prueba, simular aprobación o rechazo y validar stock en el servidor. |
+| 📦 Mis pedidos | Consultar el historial privado de compras de la cuenta. Requiere iniciar sesión. |
+| ⚙️ Administración | Iniciar sesión como ADMIN para crear, editar, ocultar o eliminar juegos y consultar pedidos. |
+| 💾 Conservación de datos | Guardar catálogo, cuentas y pedidos en un archivo JSON entre reinicios. |
+
+El carrito se conserva en el navegador durante el acceso a la cuenta. El administrador debe autenticarse antes de entrar al panel.
+
+## 🧰 ¿Qué estamos usando y para qué?
+
+| Tecnología | Uso en PixelVault |
+| --- | --- |
+| **Java 17** | Lenguaje del servidor y de las reglas de compra. |
+| **Spring Boot 3.3.4** | Ejecutar la aplicación y exponer la API REST. |
+| **Spring Security + BCrypt** | Controlar sesiones, permisos CLIENTE/ADMIN, protección CSRF y hashes de contraseñas. |
+| **HTML + CSS + JavaScript** | Construir las páginas, los estilos y las interacciones del usuario. |
+| **JSON** | Guardar videojuegos, cuentas y pedidos en el servidor, sin instalar MySQL. |
+| **localStorage** | Conservar el carrito en el navegador del usuario. |
+| **Maven** | Administrar dependencias, ejecutar pruebas y empaquetar el proyecto. |
+| **Docker + Docker Compose** | Preparar la ejecución en contenedores con un volumen para los datos. |
+| **Git + GitHub + GitHub Actions** | Organizar ramas y revisiones, y automatizar verificaciones del proyecto. |
+
+### ¿Cómo se guardan los datos?
+
+- **Servidor:** `datos/tienda.json` contiene videojuegos, cuentas con contraseñas protegidas y pedidos.
+- **Navegador:** `localStorage` conserva el carrito en ese dispositivo.
+- **Sesiones:** se mantienen en memoria; reiniciar el servidor requiere volver a iniciar sesión.
+- **Repositorio:** incluye el código. Los datos locales de usuarios y pedidos quedan excluidos mediante `.gitignore`.
+
+## 👥 Equipo y responsabilidades
+
+Somos **cinco integrantes**. La siguiente tabla es el **plan de mejoras asignadas** sobre la versión base; no indica que esas tareas ya estén terminadas. El avance se registra en Issues, pull requests y el tablero del proyecto.
+
+| Integrante | Rama de trabajo prevista | Módulo | Mejoras asignadas |
+| --- | --- | --- | --- |
+| **Camila** | `feature/Camila` | Carrito | Agregar la opción de vaciar el carrito, confirmar antes de borrar y mostrar el resultado. Verificar que cancelar conserve los productos y confirmar los elimine. |
+| **Diego** | `feature/diego` | Catálogo | Agregar un botón para restablecer búsqueda, género y orden. Mejorar el mensaje sin resultados y su presentación en móvil. |
+| **Jhair** | `feature/jhair` | Pedidos y pago | Permitir descargar un comprobante de demostración en TXT con el identificador del pedido. Mejorar la explicación del método de pago y el enlace de regreso al carrito. |
+| **Stiven** | `feature/stiven` | Login y registro | Agregar controles accesibles para mostrar u ocultar contraseñas y una guía de longitud en el registro. |
+| **Alexander** | `feature/alexander` | Ejecución y automatización | Mejorar Docker y Compose con comprobación de salud y documentación; agregar una verificación automática de sintaxis JavaScript. |
+
+**Organización de archivos:** cada integrante prioriza las páginas de su módulo y archivos JavaScript/CSS propios. Los cambios en el archivo compartido `script.js` se coordinan antes de editarlo.
+
+Docker, Compose y un workflow de verificación ya forman parte de la base. Las tareas del equipo amplían esos archivos y funcionalidades.
+
+## 🌿 Cómo trabajamos
+
+| Rama | Propósito |
+| --- | --- |
+| `main` | Versión integrada y comprobada del proyecto. |
+| `dev` | Integración de las mejoras del equipo. |
+| `feature/nombre` | Trabajo individual de cada integrante, creado desde `dev`. |
+
+1. Crear **dos Issues por integrante**, con objetivos y criterios de aceptación.
+2. Trabajar en la rama personal y registrar **cinco commits útiles por integrante**.
+3. Subir los cambios y abrir un **pull request hacia `dev`**, vinculando los Issues correspondientes.
+4. Pedir la revisión de otro integrante y comprobar las verificaciones automáticas.
+5. Integrar conservando los commits individuales; usar **Create a merge commit**.
+6. Probar `dev` y abrir el pull request hacia `main`.
+
+El tablero se organiza en **Pendiente → En curso → En revisión → Terminado**. Los tags y releases identifican versiones verificadas; cada integrante prepara también sus Gists según la consigna del curso.
+
+Para que GitHub atribuya los commits, cada persona usa su propia cuenta y un correo asociado a ella. El gráfico de contribuyentes refleja el historial integrado en la rama predeterminada; no representa un porcentaje de avance.
+
+## 🚀 Puesta en marcha
+
+### Ejecutar en Windows / VS Code
 
 1. Descomprime y abre **esta carpeta**, la que contiene `pom.xml`.
 2. Comprueba `java -version` y `mvn -version`. Necesitas un JDK 17 o superior compatible con Spring Boot 3 y Maven 3.9+. La compilación se realizó con Java 17. Si usas Java 22, Maven debe apuntar a ese JDK correctamente.
@@ -115,23 +206,20 @@ docker compose down
 
 Opcionalmente copia `.env.example` a `.env` y modifica las credenciales iniciales antes del primer inicio. El contenedor ejecuta con un usuario sin privilegios. Construye con Maven en una etapa separada.
 
-## Subir a un repositorio nuevo
-
-Este ZIP no contiene historial Git ni datos de usuarios. La carpeta `datos/`, `.env`, `target/` y los archivos locales del editor están excluidos por `.gitignore`.
-
-1. Crea un repositorio **vacío** en GitHub.
-2. Desde la carpeta del proyecto, reemplaza la URL del ejemplo por la de tu repositorio:
+## 🤝 Descargar el proyecto para colaborar
 
 ```powershell
-git init
-git add .
-git commit -m "feat: tienda PixelVault con JSON, carrito, login y pago simulado"
-git branch -M main
-git remote add origin https://github.com/TU-USUARIO/TU-REPOSITORIO.git
-git push -u origin main
+git clone https://github.com/CAMILABERROCAL/PixelVault-JSON.git
+cd PixelVault-JSON
+git switch dev
+git switch -c feature/TU-NOMBRE
 ```
 
-`.github/workflows/verificar.yml` ejecuta pruebas, empaquetado, validación de Compose y construcción de imagen. No se ha creado ni publicado ningún repositorio automáticamente. Los registros nuevos de la tienda no se suben automáticamente a GitHub; permanecen en la carpeta de datos de cada instalación.
+Si tu rama ya existe en GitHub, después de clonar usa `git switch --track origin/feature/TU-NOMBRE` en lugar de crear otra. Reemplaza `TU-NOMBRE` por el nombre acordado en la tabla del equipo.
+
+Antes de comenzar una tarea, actualiza tu rama e integra los cambios necesarios de `origin/dev`. Evita editar los mismos archivos simultáneamente sin coordinación.
+
+`.github/workflows/verificar.yml` define las comprobaciones de Maven, Compose y construcción de imagen. Su resultado se consulta en la pestaña **Actions** del repositorio.
 
 ## Estructura
 
