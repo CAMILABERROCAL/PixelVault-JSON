@@ -4,6 +4,8 @@ package com.utp.videojuegos.model;
 import java.math.BigDecimal;
 
 
+// Modelo de entidad Videojuego para catálogo y gestión de inventario
+
 public class Videojuego {
 
 
