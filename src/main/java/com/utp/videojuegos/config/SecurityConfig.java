@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+// Configuración de seguridad Spring Security: autenticación BCrypt y control de accesos por roles
 @Configuration
 public class SecurityConfig {
  @Bean PasswordEncoder passwordEncoder() {return new BCryptPasswordEncoder();}

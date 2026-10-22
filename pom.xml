@@ -4,6 +4,8 @@
  <groupId>com.utp</groupId><artifactId>pixelvault</artifactId><version>1.0.0</version><name>PixelVault JSON</name>
  <description>Tienda académica con almacenamiento JSON y pago simulado</description>
  <properties><java.version>17</java.version></properties>
+
+ <!-- Dependencias de Spring Boot, Seguridad y Pruebas Unitarias -->
  <dependencies>
   <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-web</artifactId></dependency>
   <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-security</artifactId></dependency>
