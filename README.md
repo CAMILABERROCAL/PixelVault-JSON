@@ -1,255 +1,120 @@
 <div align="center">
 
-# 🎮 PixelVault
+# 🎮 PIXELVAULT
+
 ### Tu próxima aventura empieza aquí
 
-Tienda web académica de videojuegos digitales con catálogo, carrito, cuentas de usuario y compras de demostración.
+Una tienda web de videojuegos digitales para explorar, elegir y preparar tu próxima compra.
 
-**Explora · Agrega al carrito · Inicia sesión · Simula tu compra**
+<br>
 
-[🚀 Instalación](#-puesta-en-marcha) · [🛒 Funcionalidades](#-qué-puedes-hacer) · [👥 Equipo](#-equipo-y-responsabilidades) · [🌿 Colaboración](#-cómo-trabajamos)
+![Java](https://img.shields.io/badge/Java_17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![JSON](https://img.shields.io/badge/JSON-292929?style=for-the-badge&logo=json&logoColor=white)
+
+<br>
+
+**🎮 Explora  ·  🛒 Elige  ·  🔐 Ingresa  ·  📦 Consulta tus pedidos**
 
 </div>
 
 ---
 
-## 📌 ¿De qué trata nuestra página?
+## 🌟 Conoce PixelVault
 
-**PixelVault** permite explorar videojuegos, consultar sus características y precios, preparar un carrito y completar una compra simulada. También incluye un panel para que el administrador gestione el catálogo, las existencias y consulte los pedidos.
+**PixelVault** es un proyecto académico que representa una tienda de videojuegos digitales. Permite consultar el catálogo, agregar productos al carrito y completar una compra de demostración.
 
-El proyecto sirve para practicar el desarrollo de una aplicación web completa: interfaz, API REST, autenticación, persistencia y trabajo colaborativo con GitHub.
+También cuenta con un espacio de administración para gestionar los videojuegos, actualizar las existencias y consultar los pedidos realizados.
 
-> 💳 **Los pagos son de demostración:** no se cobra dinero ni se entregan licencias reales. Se pueden probar operaciones aprobadas y rechazadas.
+Nuestro objetivo es aplicar el desarrollo web y el trabajo en equipo mediante una aplicación que conecta una interfaz interactiva con un servidor y almacenamiento en archivos JSON.
 
-## 🛒 ¿Qué puedes hacer?
+<br>
 
-| Área | Funciones actuales |
+## 🕹️ ¿Qué ofrece nuestra página?
+
+| | Funcionalidad | ¿Qué permite hacer? |
+| :---: | --- | --- |
+| 🎮 | **Catálogo de videojuegos** | Explorar títulos y consultar su descripción, plataforma, género y precio. |
+| 🔎 | **Búsqueda y filtros** | Encontrar videojuegos y ordenar los resultados por precio. |
+| 🛒 | **Carrito de compras** | Agregar productos, modificar cantidades y revisar el total. |
+| 👤 | **Registro e inicio de sesión** | Crear una cuenta y acceder para continuar al pago. |
+| 💳 | **Compra de demostración** | Probar un pago aprobado o rechazado mediante tarjeta o Yape de prueba. |
+| 📦 | **Historial de pedidos** | Consultar las compras asociadas a la cuenta del cliente. |
+| 🛠️ | **Panel de administración** | Gestionar videojuegos, precios, disponibilidad y pedidos con acceso protegido. |
+
+> 💡 Puedes explorar el catálogo y preparar tu carrito sin iniciar sesión. Para continuar al pago necesitas ingresar a tu cuenta. Las operaciones de pago son simuladas y no generan cobros reales.
+
+<br>
+
+## 💻 Tecnologías utilizadas
+
+### ⚙️ Servidor y seguridad
+
+| Tecnología | ¿Para qué la usamos? |
 | --- | --- |
-| 🎮 Catálogo público | Buscar por título o plataforma, filtrar por género, ordenar precios y consultar detalles. |
-| 🛍️ Carrito | Agregar juegos, ajustar cantidades, eliminar productos y consultar el total sin iniciar sesión. |
-| 🔐 Cuenta de cliente | Registrarse e iniciar sesión por correo. Para continuar al pago se requiere una sesión. |
-| 💳 Compra simulada | Elegir tarjeta o Yape de prueba, simular aprobación o rechazo y validar stock en el servidor. |
-| 📦 Mis pedidos | Consultar el historial privado de compras de la cuenta. Requiere iniciar sesión. |
-| ⚙️ Administración | Iniciar sesión como ADMIN para crear, editar, ocultar o eliminar juegos y consultar pedidos. |
-| 💾 Conservación de datos | Guardar catálogo, cuentas y pedidos en un archivo JSON entre reinicios. |
+| ☕ **Java 17** | Desarrollar la lógica de la aplicación y las reglas de compra. |
+| 🍃 **Spring Boot 3.3.4** | Ejecutar el servidor y conectar la interfaz con la API REST. |
+| 🔐 **Spring Security** | Controlar el inicio de sesión y los permisos del cliente y administrador. |
+| 🛡️ **BCrypt** | Proteger las contraseñas mediante hashes. |
+| 📦 **Maven** | Gestionar las dependencias, ejecutar pruebas y compilar el proyecto. |
 
-El carrito se conserva en el navegador durante el acceso a la cuenta. El administrador debe autenticarse antes de entrar al panel.
+### 🎨 Interfaz y almacenamiento
 
-## 🧰 ¿Qué estamos usando y para qué?
-
-| Tecnología | Uso en PixelVault |
+| Tecnología | ¿Para qué la usamos? |
 | --- | --- |
-| **Java 17** | Lenguaje del servidor y de las reglas de compra. |
-| **Spring Boot 3.3.4** | Ejecutar la aplicación y exponer la API REST. |
-| **Spring Security + BCrypt** | Controlar sesiones, permisos CLIENTE/ADMIN, protección CSRF y hashes de contraseñas. |
-| **HTML + CSS + JavaScript** | Construir las páginas, los estilos y las interacciones del usuario. |
-| **JSON** | Guardar videojuegos, cuentas y pedidos en el servidor, sin instalar MySQL. |
-| **localStorage** | Conservar el carrito en el navegador del usuario. |
-| **Maven** | Administrar dependencias, ejecutar pruebas y empaquetar el proyecto. |
-| **Docker + Docker Compose** | Preparar la ejecución en contenedores con un volumen para los datos. |
-| **Git + GitHub + GitHub Actions** | Organizar ramas y revisiones, y automatizar verificaciones del proyecto. |
+| 🧱 **HTML** | Organizar el contenido de las páginas. |
+| 🎨 **CSS** | Dar estilo a la tienda y adaptar las pantallas a distintos tamaños. |
+| ⚡ **JavaScript** | Gestionar las interacciones, el carrito y las solicitudes al servidor. |
+| 🗂️ **JSON** | Conservar videojuegos, cuentas y pedidos en archivos del servidor. |
+| 🛒 **localStorage** | Mantener el carrito guardado en el navegador. |
 
-### ¿Cómo se guardan los datos?
+### 🤝 Herramientas de colaboración
 
-- **Servidor:** `datos/tienda.json` contiene videojuegos, cuentas con contraseñas protegidas y pedidos.
-- **Navegador:** `localStorage` conserva el carrito en ese dispositivo.
-- **Sesiones:** se mantienen en memoria; reiniciar el servidor requiere volver a iniciar sesión.
-- **Repositorio:** incluye el código. Los datos locales de usuarios y pedidos quedan excluidos mediante `.gitignore`.
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
-## 👥 Equipo y responsabilidades
+Utilizamos Git y GitHub para organizar los cambios de cada integrante, revisar aportes e integrar las mejoras. GitHub Actions permite automatizar verificaciones y Docker facilita preparar la ejecución en contenedores.
 
-Somos **cinco integrantes**. La siguiente tabla es el **plan de mejoras asignadas** sobre la versión base; no indica que esas tareas ya estén terminadas. El avance se registra en Issues, pull requests y el tablero del proyecto.
+<br>
 
-| Integrante | Rama de trabajo prevista | Módulo | Mejoras asignadas |
+## 👥 Nuestro equipo
+
+Las siguientes responsabilidades corresponden a las mejoras asignadas sobre la versión inicial. Su avance se registra en los Issues y pull requests del repositorio.
+
+| Integrante | Área asignada | Responsabilidades | Rama |
 | --- | --- | --- | --- |
-| **Camila** | `feature/Camila` | Carrito | Agregar la opción de vaciar el carrito, confirmar antes de borrar y mostrar el resultado. Verificar que cancelar conserve los productos y confirmar los elimine. |
-| **Diego** | `feature/diego` | Catálogo | Agregar un botón para restablecer búsqueda, género y orden. Mejorar el mensaje sin resultados y su presentación en móvil. |
-| **Jhair** | `feature/jhair` | Pedidos y pago | Permitir descargar un comprobante de demostración en TXT con el identificador del pedido. Mejorar la explicación del método de pago y el enlace de regreso al carrito. |
-| **Stiven** | `feature/stiven` | Login y registro | Agregar controles accesibles para mostrar u ocultar contraseñas y una guía de longitud en el registro. |
-| **Alexander** | `feature/alexander` | Ejecución y automatización | Mejorar Docker y Compose con comprobación de salud y documentación; agregar una verificación automática de sintaxis JavaScript. |
+| 🛒 **Camila** | Carrito de compras | Agregar la opción de vaciar el carrito con confirmación y mensajes. Comprobar que cancelar conserve los productos y confirmar los elimine. | `feature/Camila` |
+| 🎮 **Diego** | Catálogo | Agregar un botón para restablecer los filtros, mejorar el mensaje sin coincidencias y ajustar la presentación en móvil. | `feature/diego` |
+| 🧾 **Jhair** | Pedidos y pago | Agregar la descarga de un comprobante de demostración en TXT y mejorar la explicación de los métodos de pago y el regreso al carrito. | `feature/jhair` |
+| 🔐 **Stiven** | Login y registro | Agregar controles accesibles para mostrar u ocultar contraseñas e incorporar una guía de longitud al registrarse. | `feature/stiven` |
+| ⚙️ **Alexander** | Ejecución y automatización | Mejorar la comprobación de salud en Docker y Compose, agregar la verificación de sintaxis JavaScript y actualizar las instrucciones de ejecución. | `feature/alexander` |
 
-**Organización de archivos:** cada integrante prioriza las páginas de su módulo y archivos JavaScript/CSS propios. Los cambios en el archivo compartido `script.js` se coordinan antes de editarlo.
+<br>
 
-Docker, Compose y un workflow de verificación ya forman parte de la base. Las tareas del equipo amplían esos archivos y funcionalidades.
+## 💾 ¿Cómo conservamos la información?
 
-## 🌿 Cómo trabajamos
+**PixelVault utiliza archivos JSON como almacenamiento del servidor.**
 
-| Rama | Propósito |
-| --- | --- |
-| `main` | Versión integrada y comprobada del proyecto. |
-| `dev` | Integración de las mejoras del equipo. |
-| `feature/nombre` | Trabajo individual de cada integrante, creado desde `dev`. |
+- 🎮 **Videojuegos:** información del catálogo, precios y existencias.
+- 👤 **Cuentas:** datos de los usuarios y contraseñas protegidas mediante hashes.
+- 📦 **Pedidos:** detalle de las compras de demostración realizadas.
+- 🛒 **Carrito:** se conserva por separado en el navegador del usuario.
 
-1. Crear **dos Issues por integrante**, con objetivos y criterios de aceptación.
-2. Trabajar en la rama personal y registrar **cinco commits útiles por integrante**.
-3. Subir los cambios y abrir un **pull request hacia `dev`**, vinculando los Issues correspondientes.
-4. Pedir la revisión de otro integrante y comprobar las verificaciones automáticas.
-5. Integrar conservando los commits individuales; usar **Create a merge commit**.
-6. Probar `dev` y abrir el pull request hacia `main`.
+Los datos del servidor se generan en `datos/tienda.json` y permanecen disponibles después de reiniciar la aplicación. Esta carpeta está excluida del repositorio mediante `.gitignore`.
 
-El tablero se organiza en **Pendiente → En curso → En revisión → Terminado**. Los tags y releases identifican versiones verificadas; cada integrante prepara también sus Gists según la consigna del curso.
+<br>
 
-Para que GitHub atribuya los commits, cada persona usa su propia cuenta y un correo asociado a ella. El gráfico de contribuyentes refleja el historial integrado en la rama predeterminada; no representa un porcentaje de avance.
+## 🚀 Ejecutar la aplicación
 
-## 🚀 Puesta en marcha
+Necesitas **JDK 17 y Maven 3.9 o superior**.
 
-### Ejecutar en Windows / VS Code
-
-1. Descomprime y abre **esta carpeta**, la que contiene `pom.xml`.
-2. Comprueba `java -version` y `mvn -version`. Necesitas un JDK 17 o superior compatible con Spring Boot 3 y Maven 3.9+. La compilación se realizó con Java 17. Si usas Java 22, Maven debe apuntar a ese JDK correctamente.
-3. Desde la terminal del proyecto:
+Desde la carpeta que contiene `pom.xml`, ejecuta:
 
 ```powershell
 mvn clean verify
 mvn spring-boot:run
-```
-
-También puedes abrir `INICIAR.bat` con Java y Maven en el PATH.
-
-4. Entra a **http://localhost:8081**. El catálogo y el carrito son públicos.
-5. Para detener el servidor, presiona Ctrl+C en la terminal.
-
-La primera ejecución requiere Internet para descargar dependencias Maven. No abras los HTML con Live Server: usa Spring Boot para que funcionen las API, las sesiones y el login. Los tres juegos iniciales tienen portadas locales; una imagen externa que agregues sí requiere conexión.
-
-### Administrador de demostración
-
-- Correo: **admin@pixelvault.local**
-- Contraseña: **AdminDemo2026!**
-
-Se crea al iniciar por primera vez. Entra desde **Administración** en la barra superior. Ninguna persona puede crear una cuenta ADMIN desde el registro público.
-
-Para crear tus propias credenciales iniciales, configura estas variables **antes del primer inicio**:
-
-```powershell
-$env:PIXELVAULT_ADMIN_EMAIL="tu-correo@ejemplo.com"
-$env:PIXELVAULT_ADMIN_PASSWORD="UnaClaveLargaDePrueba2026!"
-mvn spring-boot:run
-```
-
-Se aplican solo cuando aún no existe `datos/tienda.json`; cambiarlas después no reemplaza la cuenta guardada. Usa una clave de al menos 12 caracteres para el administrador. La cuenta publicada es exclusivamente para una demostración local. Antes de exponer la aplicación a Internet, configura tus credenciales, HTTPS y las condiciones de hosting.
-
-### Registro de clientes
-
-El cliente explora, filtra y añade juegos al carrito sin una cuenta. Al pulsar **Continuar al pago**, si no tiene una sesión, se abre el login. Desde ahí puede crear su cuenta y luego ingresar; el carrito se conserva. La página Mis pedidos también requiere sesión.
-
-## Funciones
-
-- Catálogo: búsqueda por título/plataforma, filtro por género, orden de precios y detalle.
-- Carrito público: cantidades, eliminación y resumen; persiste en el navegador mediante localStorage.
-- Registro y login por correo, contraseñas con BCrypt y sesiones de Spring Security.
-- CSRF habilitado para registro, login, cambios de inventario, compra y logout.
-- Pago simulado: tarjeta de prueba o Yape de prueba, escenario aprobado o rechazado.
-- Pedido: total calculado en el servidor, validación de stock, historial privado por usuario.
-- Reintentos con la misma clave de pago no crean pedidos adicionales.
-- Panel ADMIN: crear, editar, ocultar o eliminar juegos, administrar stock y ver pedidos.
-- Persistencia conjunta de pedidos y stock en un único JSON mediante reemplazo atómico.
-- Archivo dañado: la aplicación falla al arrancar y lo conserva; no lo borra ni lo sobrescribe silenciosamente.
-
-## Pago simulado: alcance exacto
-
-**No es una integración con una pasarela financiera real.** No cobra dinero, no solicita tarjeta, CVV, PIN ni claves, no genera un QR de Yape válido y no entrega licencias reales. El usuario elige un método de demostración y un escenario:
-
-- Aprobado: se crea un pedido `PAGADO_DEMO` y se descuenta stock.
-- Rechazado: no se crea el pedido ni se descuenta stock. El carrito sigue intacto.
-
-Los precios enviados por el navegador no se usan como fuente del total: el servidor usa el catálogo vigente. Para integrar pagos reales después, hacen falta proveedor, credenciales, creación de pagos en backend y confirmación verificada mediante webhooks. No debe reutilizarse la selección de “aprobado” del simulador para confirmar dinero real.
-
-El stock representa unidades digitales de demostración. La tabla de licencias de MySQL fue sustituida por un contador persistente; no se implementa la distribución de códigos activables.
-
-## Archivos de datos y persistencia
-
-En el primer inicio se crea:
-
-```text
-datos/
-  tienda.json       # videojuegos, cuentas con hash y pedidos
-  tienda.lock       # bloqueo de uso por una sola instancia
-```
-
-Un solo archivo de estado permite guardar compra y stock juntos. No borres `tienda.json` para actualizar el catálogo: usa el panel. Al reiniciar se conservan cuentas, cambios y pedidos. Las sesiones se guardan en memoria: después de reiniciar, los usuarios deben volver a iniciar sesión.
-
-El carrito vive en el navegador/dispositivo donde se creó; no se sincroniza entre dispositivos. Los pedidos sí se guardan en el servidor y quedan asociados al correo de cada cuenta. Los pedidos conservan título y precio de compra aunque después se edite o elimine un juego.
-
-Puedes cambiar la carpeta con `PIXELVAULT_DATA_DIR`:
-
-```powershell
-$env:PIXELVAULT_DATA_DIR="C:\PixelVaultDatos"
-mvn spring-boot:run
-```
-
-Para hacer una copia de seguridad, detén el servidor y copia `tienda.json`. El directorio debe permitir escritura y reemplazos atómicos. La aplicación bloquea una segunda instancia que intente usar esa misma carpeta: es una solución académica para un solo servidor, no almacenamiento distribuido. Pedidos y existencias se procesan bajo exclusión mutua para evitar ventas concurrentes del último stock.
-
-## Pruebas
-
-```powershell
-mvn test
-mvn clean verify
-```
-
-Las pruebas usan carpetas temporales y no modifican `datos/` ni requieren MySQL. Cubren invitados, registro, contraseña protegida, sesiones, rol ADMIN, CSRF, precios, stock, pago rechazado, reintentos, concurrencia y reapertura del archivo. Revisa `VALIDACION.md` para el alcance de la verificación de entrega.
-
-## Docker y Docker Compose
-
-Necesitas Docker Desktop o Docker Engine con Compose. No necesitas MySQL ni Java/Maven en el host si ejecutas con Docker.
-
-```powershell
-docker compose up --build
-```
-
-Abre http://localhost:8081. El volumen `pixelvault_datos` conserva los datos al recrear el contenedor.
-
-```powershell
-docker compose down
-```
-
-`docker compose down -v` **elimina los datos del volumen**. No lo uses si deseas conservarlos.
-
-Opcionalmente copia `.env.example` a `.env` y modifica las credenciales iniciales antes del primer inicio. El contenedor ejecuta con un usuario sin privilegios. Construye con Maven en una etapa separada.
-
-## 🤝 Descargar el proyecto para colaborar
-
-```powershell
-git clone https://github.com/CAMILABERROCAL/PixelVault-JSON.git
-cd PixelVault-JSON
-git switch dev
-git switch -c feature/TU-NOMBRE
-```
-
-Si tu rama ya existe en GitHub, después de clonar usa `git switch --track origin/feature/TU-NOMBRE` en lugar de crear otra. Reemplaza `TU-NOMBRE` por el nombre acordado en la tabla del equipo.
-
-Antes de comenzar una tarea, actualiza tu rama e integra los cambios necesarios de `origin/dev`. Evita editar los mismos archivos simultáneamente sin coordinación.
-
-`.github/workflows/verificar.yml` define las comprobaciones de Maven, Compose y construcción de imagen. Su resultado se consulta en la pestaña **Actions** del repositorio.
-
-## Estructura
-
-```text
-src/main/java/com/utp/videojuegos/
-  config/SecurityConfig.java        # sesiones, acceso y BCrypt
-  controller/ShopController.java    # catálogo, cuentas y compra
-  controller/ApiErrors.java         # respuestas de error
-  model/Videojuego.java             # datos del producto
-  model/ShopData.java               # cuentas, pedidos y estado
-  repository/JsonStore.java         # lectura/escritura atómica
-src/main/resources/static/
-  index.html                       # catálogo público
-  carrito.html                     # carrito sin login
-  login.html / registro.html       # cuentas
-  pago.html                        # pago de demostración con sesión
-  pedidos.html                     # historial privado
-  admin.html                       # panel protegido
-  css/ / js/ / img/
-src/test/                          # pruebas de integración
-Dockerfile / compose.yaml
-```
-
-## Cambios respecto al avance original
-
-- Eliminados los repositorios JPA, las entidades JPA, las dependencias MySQL/JWT sin uso y la configuración datasource.
-- Conservado el modelo de videojuegos, las tres portadas y la identidad visual azul/oscura.
-- Unificado el login por sesión; eliminado el endpoint paralelo que solo verificaba credenciales sin crear una sesión.
-- Agregados el registro visible, carrito, checkout, pedidos y gestión de stock persistente.
-- Corregidas las operaciones del administrador para enviar CSRF y validar los datos.
-- Preparados README, GitHub Actions y contenedores.
-
-Software educativo. No es una plataforma de pagos real ni un servicio de entrega de videojuegos licenciados.
