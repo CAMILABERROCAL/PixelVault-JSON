@@ -56,3 +56,8 @@ Cambios solo en el navegador: `js/pedidos-mejoras.js`, `js/pago-mejoras.js`, `pe
 
 - El comprobante es de demostración; no reemplaza un comprobante de pago real.
 - La prueba se ejecuta a mano en la consola del navegador (igual que las del carrito); no forma parte de `mvn verify`.
+
+## Scripts de prueba de consola (Frontend)
+
+- `pruebas/carrito-confirmacion.js`: verifica el vaciado del carrito tras confirmación y la persistencia en `localStorage`.
+- `pruebas/carrito-cancelacion.js`: comprueba que cancelar la operación conserve intactos los productos, cantidades y total.
