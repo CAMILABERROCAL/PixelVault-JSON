@@ -53,3 +53,49 @@ new MutationObserver(agregarAyudaDePago).observe(
 );
 
 agregarAyudaDePago();
+
+// Enlace para volver al carrito y cambiar la selección antes de pagar.
+function agregarVolverAlCarrito() {
+    const boton = document.querySelector('#payButton');
+
+    if (!boton || document.querySelector('#volverCarritoPago')) {
+        return;
+    }
+
+    const enlace = document.createElement('a');
+    enlace.id = 'volverCarritoPago';
+    enlace.className = 'btn full';
+    enlace.href = '/carrito.html';
+    enlace.textContent = '← Volver al carrito para cambiar mi selección';
+    enlace.style.marginTop = '10px';
+    boton.after(enlace);
+}
+
+// Tras un pago rechazado (o cualquier error), ofrece volver al carrito desde el mensaje.
+function agregarVolverTrasError() {
+    const aviso = document.querySelector('#paymentError .notice.error');
+
+    if (!aviso || aviso.querySelector('#volverCarritoError')) {
+        return;
+    }
+
+    const enlace = document.createElement('a');
+    enlace.id = 'volverCarritoError';
+    enlace.className = 'btn small';
+    enlace.href = '/carrito.html';
+    enlace.textContent = 'Volver al carrito';
+    enlace.style.marginTop = '10px';
+    aviso.append(' ', enlace);
+}
+
+new MutationObserver(agregarVolverAlCarrito).observe(
+    document.querySelector('#paymentView'),
+    { childList: true, subtree: true }
+);
+
+new MutationObserver(agregarVolverTrasError).observe(
+    document.querySelector('#paymentError'),
+    { childList: true }
+);
+
+agregarVolverAlCarrito();
