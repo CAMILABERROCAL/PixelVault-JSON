@@ -1,0 +1,26 @@
+name: Verificar PixelVault
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  java-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - name: Pruebas y empaquetado sin MySQL
+        run: mvn -B verify
+  docker-config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validar Compose
+        run: docker compose config --quiet
+      - name: Construir imagen
+        run: docker build -t pixelvault:check .

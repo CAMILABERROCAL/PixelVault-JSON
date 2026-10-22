@@ -1,0 +1,14 @@
+services:
+  pixelvault:
+    build: .
+    ports:
+      - "8081:8081"
+    environment:
+      PIXELVAULT_DATA_DIR: /app/datos
+      PIXELVAULT_ADMIN_EMAIL: ${PIXELVAULT_ADMIN_EMAIL:-admin@pixelvault.local}
+      PIXELVAULT_ADMIN_PASSWORD: ${PIXELVAULT_ADMIN_PASSWORD:-AdminDemo2026!}
+    volumes:
+      - pixelvault_datos:/app/datos
+    restart: unless-stopped
+volumes:
+  pixelvault_datos:
