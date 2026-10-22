@@ -9,6 +9,14 @@ if (clearCartButton) {
       return;
     }
 
+    const confirmed = window.confirm(
+      '¿Seguro que deseas vaciar el carrito? Se eliminarán todos los productos.'
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
     try {
       saveCart([]);
       window.location.reload();
