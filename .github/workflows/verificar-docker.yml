@@ -1,0 +1,59 @@
+
+name: Verificar ejecución con Docker
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+  workflow_dispatch:
+
+jobs:
+  verificar-docker:
+    name: Validar Docker y aplicación
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Crear credenciales de prueba
+        run: |
+          cat > .env <<'EOF'
+          PIXELVAULT_ADMIN_EMAIL=admin@pixelvault.local
+          PIXELVAULT_ADMIN_PASSWORD=AdminDemo2026!
+          EOF
+
+      - name: Validar Docker Compose
+        run: docker compose config --quiet
+
+      - name: Construir imagen Docker
+        run: docker compose build
+
+      - name: Iniciar aplicación
+        run: docker compose up -d --no-build
+
+      - name: Verificar que la aplicación responda
+        run: |
+          for i in {1..30}; do
+            if curl --fail --silent http://localhost:8081/actuator/health | grep -q '"status":"UP"'; then
+              echo "Aplicación funcionando correctamente"
+              exit 0
+            fi
+
+            echo "Esperando a la aplicación... intento $i"
+            sleep 5
+          done
+
+          echo "ERROR: La aplicación no respondió"
+          exit 1
+
+      - name: Mostrar logs si falla
+        if: failure()
+        run: docker compose logs --no-color --tail=100
+
+      - name: Detener contenedores
+        if: always()
+        run: docker compose down
