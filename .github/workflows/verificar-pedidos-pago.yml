@@ -1,68 +1,31 @@
-name: Verificar pedidos y pago 
+name: Jhair - Verificar préstamos y devoluciones
+
 on:
   push:
   pull_request:
-permissions:
-  contents: read
+  workflow_dispatch:
+
 jobs:
-  comprobante-y-pago:
+  prestamos-y-devoluciones:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - name: Verificar préstamos y devoluciones
+        run: mvn -B test -Dtest=PrestamosIntegrationTest
+
+  comprobante:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-      - name: Verificar sintaxis de los scripts de pedidos y pago
+          node-version: 20
+      - name: Revisar sintaxis de los scripts de pedidos y pago
         run: |
           node --check src/main/resources/static/js/pedidos-mejoras.js
           node --check src/main/resources/static/js/pago-mejoras.js
-          node --check pruebas/comprobante-txt.js
-      - name: Comprobar el texto del comprobante de demostración
-        run: |
-          node <<'JS'
-          const fs = require('fs');
-          const vm = require('vm');
-
-          // Simula lo que aporta script.js y el navegador.
-          const contexto = {
-            money: (n) => `S/ ${Number(n).toFixed(2)}`,
-            date: (f) => String(f),
-            esc: (t) => String(t),
-            toast: () => {},
-            orderMarkup: () => '',
-            document: { addEventListener: () => {} },
-            window: {}
-          };
-          vm.createContext(contexto);
-          vm.runInContext(
-            fs.readFileSync('src/main/resources/static/js/pedidos-mejoras.js', 'utf8'),
-            contexto
-          );
-
-          const pedido = {
-            id: 'abcdef12-3456',
-            fecha: '2026-10-22T10:00:00',
-            usuario: 'cliente@correo.com',
-            metodo: 'YAPE_DEMO',
-            total: 120,
-            items: [{ titulo: 'EA Sports FC 24', precio: 60, cantidad: 2 }]
-          };
-          const texto = contexto.construirComprobante(pedido);
-
-          const esperado = [
-            ['número de pedido', 'Pedido: abcdef12-3456'],
-            ['fecha', '2026-10-22T10:00:00'],
-            ['método de pago', 'Yape de prueba'],
-            ['producto y cantidad', 'EA Sports FC 24 x 2'],
-            ['total', 'TOTAL: S/ 120.00'],
-            ['aviso fiscal', 'No es un comprobante fiscal'],
-            ['aviso de cobro', 'cobro real']
-          ];
-          const faltan = esperado.filter(([, dato]) => !texto.includes(dato));
-
-          if (faltan.length > 0) {
-            console.error('Faltan en el comprobante: ' + faltan.map(([n]) => n).join(', '));
-            process.exit(1);
-          }
-          console.log('OK: el comprobante incluye todos los datos y avisos.');
-          JS

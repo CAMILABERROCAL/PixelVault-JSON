@@ -1,0 +1,37 @@
+name: Camila - Verificar seleccion de libros
+
+on:
+  push:
+    branches:
+      - feature/Camila
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verificar-seleccion:
+    name: Sintaxis y pruebas de seleccion
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Comprobar sintaxis de JavaScript
+        run: |
+          node --check src/main/resources/static/js/script.js
+          node --check src/main/resources/static/js/carrito-mejoras.js
+
+      - name: Probar el vaciado de la seleccion
+        run: node --test pruebas/seleccion-libros.test.cjs
