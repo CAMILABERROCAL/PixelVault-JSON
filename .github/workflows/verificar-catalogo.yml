@@ -1,0 +1,25 @@
+name: Verificacion de Catalogo y Build
+
+on:
+  push:
+    branches: [ "main", "dev", "feature/diego" ]
+  pull_request:
+    branches: [ "main", "dev" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Descargar codigo fuente
+      uses: actions/checkout@v4
+
+    - name: Configurar Java JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Compilar y validar proyecto con Maven
+      run: mvn -B test-compile --file pom.xml
