@@ -177,7 +177,7 @@ function addToCart(id) {
 
   try {
     saveCart(cart);
-    toast('Agregado a tu carrito');
+    toast('Agregado a tu selección');
   } catch {
     toast(
       'No se pudo guardar el carrito. Permite el almacenamiento del navegador.'
@@ -200,21 +200,21 @@ async function catalog() {
 
     const list = products.filter(product =>
       (!genre || product.genero === genre) &&
-      `${product.titulo} ${product.plataforma}`
+      `${product.titulo} ${product.autor || product.plataforma}`
         .toLocaleLowerCase()
         .includes(query)
     );
 
     list.sort(
-      $('#sort').value === 'priceAsc'
-        ? (a, b) => a.precio - b.precio
+      $('#sort').value === 'stockDesc'
+        ? (a, b) => b.stock - a.stock
         : $('#sort').value === 'priceDesc'
           ? (a, b) => b.precio - a.precio
           : (a, b) => a.titulo.localeCompare(b.titulo)
     );
 
     $('#catalogCount').textContent =
-      `${list.length} videojuegos disponibles en el catálogo`;
+      `${list.length} títulos en el catálogo`;
 
     $('#games').innerHTML = list.map(product => `
       <article class="card">
@@ -230,7 +230,7 @@ async function catalog() {
           </div>
           <h3>${esc(product.titulo)}</h3>
           <div class="row">
-            <span class="price">${money(product.precio)}</span>
+            <span class="tiny muted">Biblioteca escolar</span>
             <span class="stock ${
               product.stock === 0 ? 'out' : product.stock <= 5 ? 'low' : ''
             }">
@@ -245,7 +245,7 @@ async function catalog() {
               data-add="${product.id}"
               ${!product.stock ? 'disabled' : ''}
             >
-              + Al carrito
+              + Seleccionar
             </button>
             <button
               class="ghost"
@@ -294,16 +294,16 @@ async function catalog() {
         <p class="muted">
           ${esc(
             product.descripcion ||
-            'Descubre tu próxima aventura con este videojuego.'
+            'Descubre una nueva historia en nuestra biblioteca.'
           )}
         </p>
-        <p class="price">${money(product.precio)}</p>
+        <p class="stock">${product.stock} ejemplares disponibles</p>
         <button
           class="primary"
           id="detailAdd"
           ${!product.stock ? 'disabled' : ''}
         >
-          Agregar al carrito
+          Seleccionar libro
         </button>
       `;
 
