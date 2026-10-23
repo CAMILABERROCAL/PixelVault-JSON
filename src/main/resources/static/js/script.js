@@ -144,6 +144,6 @@ document.querySelectorAll('.pass-toggle').forEach(function (btn) {
   input.addEventListener('input', function () {
     var len = input.value.length;
     count.textContent = len + ' de 64 caracteres';
-    bar.style.width = Math.min(len / 8, 1) * 100 + '%';
+    bar.style.width = Math.min(len / 8, 1) * 100 + '%'; var hint = document.getElementById('passHint'); if (hint) { hint.textContent = len === 0 ? 'Entre 8 y 64 caracteres.' : len < 8 ? 'Te faltan ' + (8 - len) + ' caracteres para llegar al mínimo.' : 'Longitud correcta. Ya puedes crear tu cuenta.'; }
   });
 })();
