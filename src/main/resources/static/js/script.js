@@ -82,7 +82,7 @@ async function authPage(register=false) {
  if(register)$('#loginLink').href='/login.html'+query;else $('#registerLink').href='/registro.html'+query;
  const form=$(register?'#registerForm':'#loginForm');
  form.onsubmit=async e=>{
-  e.preventDefault();const btn=form.querySelector('button[type="submit"],button');btn.disabled=true;notice('#authMessage','');
+  e.preventDefault();const btn=form.querySelector('button:not(.pass-toggle)');btn.disabled=true;notice('#authMessage','');
   try {
    const data=Object.fromEntries(new FormData(form));data.correo=data.correo.trim().toLowerCase();
    if(register){await api('/api/auth/registro',{method:'POST',body:JSON.stringify(data)});location.href='/login.html'+(query?query+'&':'?')+'creada=1';}
@@ -126,3 +126,12 @@ async function adminPage(){
 }
 (async()=>{try{await nav();const p=document.body.dataset.page;if(p==='catalog')await catalog();if(p==='cart')await cartPage();if(p==='login')await authPage();if(p==='register')await authPage(true);if(p==='payment')await payment();if(p==='orders')await ordersPage();if(p==='admin')await adminPage();}catch(e){const id={catalog:'#catalogError',cart:'#cartError',payment:'#paymentError',admin:'#adminError',orders:'#orders',login:'#authMessage',register:'#authMessage'}[document.body.dataset.page];notice(id,e.message);}})();
 window.addEventListener('storage',e=>{if(e.key===CART){updateCount();if(['cart','payment'].includes(document.body.dataset.page))location.reload();}});
+// Mostrar u ocultar contraseña
+document.querySelectorAll('.pass-toggle').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var input = document.getElementById(btn.dataset.target);
+    var visible = input.type === 'text';
+    input.type = visible ? 'password' : 'text';
+    btn.textContent = visible ? 'Mostrar' : 'Ocultar'; btn.setAttribute('aria-pressed', String(!visible)); btn.setAttribute('aria-label', visible ? 'Mostrar contraseña' : 'Ocultar contraseña');
+  });
+});
