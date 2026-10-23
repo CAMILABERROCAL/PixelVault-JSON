@@ -78,5 +78,17 @@ public class ShopController {
  }
  @GetMapping("/api/pedidos") public List<Order> orders(Authentication auth){return store.read(s->s.pedidos.stream().filter(o->o.usuario().equals(auth.getName())).sorted(Comparator.comparing(Order::fecha).reversed()).toList());}
  @GetMapping("/api/admin/pedidos") public List<Order> allOrders(){return store.read(s->s.pedidos.stream().sorted(Comparator.comparing(Order::fecha).reversed()).toList());}
+ @PostMapping("/api/pedidos/{id}/devolver") public Order devolver(@PathVariable String id,Authentication auth){
+  return store.update(s->{
+   int i=-1;
+   for(int n=0;n<s.pedidos.size();n++){Order o=s.pedidos.get(n);if(o.id().equals(id)&&o.usuario().equals(auth.getName()))i=n;}
+   if(i<0)throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Pedido no encontrado.");
+   Order o=s.pedidos.get(i);
+   if("DEVUELTO".equals(o.estado()))throw new ResponseStatusException(HttpStatus.CONFLICT,"Este pedido ya fue devuelto.");
+   for(Line l:o.items())for(Videojuego g:s.videojuegos)if(g.getId().equals(l.videojuegoId()))g.setStock(g.getStock()+l.cantidad());
+   Order devuelto=new Order(o.id(),o.usuario(),o.fecha(),o.metodo(),"DEVUELTO",o.total(),o.clave(),o.items());
+   s.pedidos.set(i,devuelto);return devuelto;
+  });
+ }
  private ResponseStatusException bad(String text){return new ResponseStatusException(HttpStatus.BAD_REQUEST,text);}
 }
