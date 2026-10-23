@@ -5,39 +5,29 @@ const clearCartButton = document.querySelector('#clearCartBtn');
 if (clearCartButton) {
   clearCartButton.addEventListener('click', () => {
     if (readCart().length === 0) {
-      toast('Tu carrito ya está vacío.');
+      toast('Tu selección ya está vacía.');
       return;
     }
 
     const confirmed = window.confirm(
-      '¿Seguro que deseas vaciar el carrito? Se eliminarán todos los productos.'
+      '¿Quieres vaciar tu selección? Se quitarán todos los libros seleccionados.'
     );
 
-    if (!confirmed) {
-      return;
-    }
+    if (!confirmed) return;
 
     try {
       saveCart([]);
     } catch {
-      toast('No se pudo vaciar el carrito. Inténtalo nuevamente.');
+      toast('No se pudo vaciar la selección. Inténtalo nuevamente.');
       return;
     }
 
     notice('#cartError', '');
 
-    document.querySelector('#cartView').innerHTML = `
-      <div class="empty">
-        <div class="eyebrow">Una nueva partida te espera</div>
-        <h2>Tu carrito está vacío</h2>
-        <p>Eliminaste todos los productos de tu selección.</p>
-        <p class="price">Total: ${money(0)}</p>
-        <a class="btn primary" href="/index.html#catalogo">
-          Descubrir videojuegos
-        </a>
-      </div>
-    `;
+    document.querySelector('#cartView').dispatchEvent(
+      new Event('seleccion-vaciada')
+    );
 
-    toast('Carrito vaciado correctamente.');
+    toast('Selección vaciada correctamente.');
   });
 }
