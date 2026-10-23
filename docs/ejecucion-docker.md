@@ -21,6 +21,33 @@ El proyecto contiene los siguientes archivos:
 - `compose.yaml`: permite configurar e iniciar los servicios del proyecto.
 - `.dockerignore`: excluye archivos innecesarios durante la construcción de la imagen.
 
+## Preparación del archivo .env
+
+Antes de iniciar la aplicación, es necesario configurar las variables de entorno.
+
+En PowerShell, desde la carpeta principal del proyecto, ejecutar:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Después, abrir el archivo `.env` y configurar:
+
+```dotenv
+PIXELVAULT_ADMIN_EMAIL=admin@ejemplo.local
+PIXELVAULT_ADMIN_PASSWORD=REEMPLAZAR_POR_UNA_CLAVE_SEGURA
+```
+
+Los valores anteriores son ejemplos. Se deben establecer credenciales propias antes de ejecutar la aplicación.
+
+El archivo `.env` no debe subirse a GitHub.
+
+Para verificar la configuración:
+
+```bash
+docker compose config --quiet
+```
+
 ## Construcción y ejecución
 
 Desde la carpeta principal del proyecto, ejecutar:
