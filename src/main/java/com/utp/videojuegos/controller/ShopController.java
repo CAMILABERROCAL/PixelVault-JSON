@@ -21,7 +21,7 @@ public class ShopController {
  public record Registration(@NotBlank @Size(max=100) String nombre,@NotBlank @Size(max=100) String apellido,@NotBlank @Email @Size(max=150) String correo,@NotBlank @Size(min=8,max=64) String password){}
  public record Item(@NotNull @Positive Long videojuegoId,@Min(1) @Max(99) int cantidad){}
  public record Checkout(@NotEmpty @Size(max=50) List<@NotNull @Valid Item> items,@NotBlank String metodo,@NotBlank String resultado,@NotBlank @Size(max=64) String clave){}
- public record Product(@NotBlank @Size(max=150) String titulo,@Size(max=3000) String descripcion,@NotBlank @Size(max=80) String genero,@NotBlank @Size(max=80) String plataforma,@NotNull @DecimalMin("0.01") @DecimalMax("99999.99") @Digits(integer=5,fraction=2) BigDecimal precio,@NotNull @Min(0) @Max(100000) Integer stock,@Size(max=500) String imagenUrl,@NotNull Boolean activo){}
+ public record Product(@NotBlank @Size(max=150) String titulo,@Size(max=3000) String descripcion,@NotBlank @Size(max=80) String genero,@NotBlank @Size(max=80) String plataforma,@DecimalMin("0.00") @DecimalMax("99999.99") @Digits(integer=5,fraction=2) BigDecimal precio,@NotNull @Min(0) @Max(100000) Integer stock,@Size(max=500) String imagenUrl,@NotNull Boolean activo){}
  @GetMapping("/api/csrf") public Map<String,String> csrf(CsrfToken t){return Map.of("token",t.getToken(),"headerName",t.getHeaderName(),"parameterName",t.getParameterName());}
  @GetMapping("/api/me") public Map<String,Object> me(Authentication auth) {
   if(auth==null)return Map.of("autenticado",false);
@@ -50,11 +50,11 @@ public class ShopController {
  private Videojuego product(Long id,Product p) {
   String image=p.imagenUrl()==null?"":p.imagenUrl().trim();
   if(!image.isEmpty()&&!image.startsWith("/img/")&&!image.startsWith("https://"))throw bad("La imagen debe ser una URL https o una ruta /img/.");
-  Videojuego g=new Videojuego();g.setId(id);g.setTitulo(p.titulo().trim());g.setDescripcion(p.descripcion()==null?"":p.descripcion().trim());g.setGenero(p.genero().trim());g.setPlataforma(p.plataforma().trim());g.setPrecio(p.precio());g.setStock(p.stock());g.setImagenUrl(image);g.setActivo(p.activo());return g;
+  Videojuego g=new Videojuego();g.setId(id);g.setTitulo(p.titulo().trim());g.setDescripcion(p.descripcion()==null?"":p.descripcion().trim());g.setGenero(p.genero().trim());g.setPlataforma(p.plataforma().trim());g.setPrecio(p.precio()==null?BigDecimal.ZERO:p.precio());g.setStock(p.stock());g.setImagenUrl(image);g.setActivo(p.activo());return g;
  }
  @PostMapping("/api/videojuegos") @ResponseStatus(HttpStatus.CREATED) public Videojuego add(@Valid @RequestBody Product p){return store.update(s->{Videojuego g=product(s.nextGameId++,p);s.videojuegos.add(g);return g;});}
  @PutMapping("/api/videojuegos/{id}") public Videojuego edit(@PathVariable Long id,@Valid @RequestBody Product p){return store.update(s->{int i=-1;for(int n=0;n<s.videojuegos.size();n++)if(s.videojuegos.get(n).getId().equals(id))i=n;if(i<0)throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Videojuego no encontrado.");Videojuego g=product(id,p);s.videojuegos.set(i,g);return g;});}
- @DeleteMapping("/api/videojuegos/{id}") @ResponseStatus(HttpStatus.NO_CONTENT) public void delete(@PathVariable Long id){store.update(s->{if(!s.videojuegos.removeIf(g->g.getId().equals(id)))throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Videojuego no encontrado.");return true;});}
+ @DeleteMapping("/api/videojuegos/{id}") @ResponseStatus(HttpStatus.NO_CONTENT) public void delete(@PathVariable Long id){store.update(s->{if(s.prestamos.stream().anyMatch(l->!"DEVUELTO".equals(l.estado())&&l.items().stream().anyMatch(i->i.videojuegoId()==id)))throw new ResponseStatusException(HttpStatus.CONFLICT,"No puedes eliminar un libro con préstamos pendientes. Puedes ocultarlo.");if(!s.videojuegos.removeIf(g->g.getId().equals(id)))throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Videojuego no encontrado.");return true;});}
  @PostMapping("/api/pedidos") public Order checkout(@Valid @RequestBody Checkout c,Authentication auth) {
   if(!Set.of("TARJETA_DEMO","YAPE_DEMO").contains(c.metodo()))throw bad("Método de pago no admitido.");
   if(!Set.of("APROBADO","RECHAZADO").contains(c.resultado()))throw bad("Resultado de simulación no válido.");
@@ -92,3 +92,4 @@ public class ShopController {
  }
  private ResponseStatusException bad(String text){return new ResponseStatusException(HttpStatus.BAD_REQUEST,text);}
 }
+

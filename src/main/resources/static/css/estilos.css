@@ -27,3 +27,31 @@
   background: #4caf50;
   transition: width 0.2s ease;
 }
+/* AulaLibro: identidad visual de la biblioteca escolar. */
+:root{color-scheme:light;--bg:#f7f6ef;--panel:#fffef9;--panel2:#edf2e9;--line:#d8dfd1;--text:#203b30;--muted:#607166;--blue:#246047;--green:#246047;--danger:#a53636}
+body{background:var(--bg)}
+header{background:#fffef9f2}.brand{letter-spacing:-1.2px}.brand span{color:#438064}
+.nav-links a:hover,.auth-form .links{color:#246047}.count{color:white}
+input,select,textarea{background:#fffefb;border-color:#c6d1c3}
+button:hover,.btn:hover{filter:brightness(.96)}
+.hero{display:grid;grid-template-columns:1.35fr 1fr;gap:30px;align-items:center;background:#e5eddf;border-color:#d4dfcb;padding:48px;min-height:370px}
+.hero:after{content:none}.hero h1{font-family:Georgia,serif;font-size:clamp(38px,5vw,64px);font-weight:500;letter-spacing:-2px}
+.hero h1 span{color:#377252}.hero p,.chips{color:#506c58}.eyebrow{color:#4b725b}
+.hero-copy{position:relative;z-index:1}.hero .primary{padding:15px 23px}
+.library-art{height:285px;position:relative;background:#d6e2cd;border-radius:50% 50% 12px 12px}
+.art-label{position:absolute;top:28px;left:0;right:0;text-align:center;font-size:10px;letter-spacing:3px;color:#4b725b}
+.book{position:absolute;bottom:62px;width:75px;height:165px;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;letter-spacing:3px;font-size:12px;font-weight:700;border-radius:4px 10px 10px 4px;box-shadow:inset 8px 0 #0001,8px 8px 12px #233b3020;border-right:5px solid #fff5}
+.book-one{left:17%;background:#285b47;color:#fff;height:155px;transform:rotate(-12deg)}
+.book-two{left:41%;background:#d7b55e;color:#3e422b;height:180px;transform:rotate(3deg)}
+.book-three{left:65%;background:#bd7256;color:#fff;height:145px;transform:rotate(13deg)}
+.shelf{position:absolute;bottom:53px;left:9%;right:9%;height:9px;border-radius:6px;background:#68806b}
+.art-caption{position:absolute;bottom:17px;left:0;right:0;text-align:center;font-family:Georgia,serif;font-style:italic;color:#4b725b}
+.card{box-shadow:0 5px 20px #243b3008}.card:hover{border-color:#719a7c}.pill{background:#e4efdf;color:#315d3c}
+.cover{object-fit:contain;padding:20px;background:#edf0e5}.card h3{font-family:Georgia,serif;font-weight:500}
+.auth-side{background:linear-gradient(140deg,#dce9d4,#edf2e5)}.auth-side p{color:#506c58}.auth-side h1{font-family:Georgia,serif}
+.notice{background:#edf2e9;color:#31583e;border-color:#bacdb7}.notice.error{background:#fff0ec;color:#923d36;border-color:#e4b8b0}.notice.success{background:#e5f3e6;color:#2b6339;border-color:#bad4ba}
+.empty{border-color:#b9cbb6}.stock.low{color:#8b6519}.steps .active{color:#246047}.pay-option:has(input:checked){background:#e5efdf}
+#toast{background:#234d3b;color:#fff}.pass-meter{background:#dce5d8}
+:focus-visible{outline-color:#4b8963}footer{background:#edf1e7}
+@media(max-width:850px){.hero{padding:30px;grid-template-columns:1.2fr 1fr;gap:15px}.book{width:58px}}
+@media(max-width:620px){.hero{grid-template-columns:1fr}.library-art{height:235px;max-width:330px;width:100%;margin:10px auto 0}.book{width:64px;height:125px}.book-two{height:145px}.book-one{height:130px}.hero h1{font-size:43px}.chips{gap:12px}.cover{height:280px}}
