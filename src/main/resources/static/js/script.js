@@ -126,3 +126,12 @@ async function adminPage(){
 }
 (async()=>{try{await nav();const p=document.body.dataset.page;if(p==='catalog')await catalog();if(p==='cart')await cartPage();if(p==='login')await authPage();if(p==='register')await authPage(true);if(p==='payment')await payment();if(p==='orders')await ordersPage();if(p==='admin')await adminPage();}catch(e){const id={catalog:'#catalogError',cart:'#cartError',payment:'#paymentError',admin:'#adminError',orders:'#orders',login:'#authMessage',register:'#authMessage'}[document.body.dataset.page];notice(id,e.message);}})();
 window.addEventListener('storage',e=>{if(e.key===CART){updateCount();if(['cart','payment'].includes(document.body.dataset.page))location.reload();}});
+// Mostrar u ocultar contraseña
+document.querySelectorAll('.pass-toggle').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var input = document.getElementById(btn.dataset.target);
+    var visible = input.type === 'text';
+    input.type = visible ? 'password' : 'text';
+    btn.textContent = visible ? 'Mostrar' : 'Ocultar';
+  });
+});
