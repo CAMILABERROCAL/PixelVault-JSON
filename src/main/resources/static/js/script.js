@@ -82,7 +82,7 @@ async function authPage(register=false) {
  if(register)$('#loginLink').href='/login.html'+query;else $('#registerLink').href='/registro.html'+query;
  const form=$(register?'#registerForm':'#loginForm');
  form.onsubmit=async e=>{
-  e.preventDefault();const btn=form.querySelector('button[type="submit"],button');btn.disabled=true;notice('#authMessage','');
+  e.preventDefault();const btn=form.querySelector('button:not(.pass-toggle)');btn.disabled=true;notice('#authMessage','');
   try {
    const data=Object.fromEntries(new FormData(form));data.correo=data.correo.trim().toLowerCase();
    if(register){await api('/api/auth/registro',{method:'POST',body:JSON.stringify(data)});location.href='/login.html'+(query?query+'&':'?')+'creada=1';}
@@ -132,6 +132,6 @@ document.querySelectorAll('.pass-toggle').forEach(function (btn) {
     var input = document.getElementById(btn.dataset.target);
     var visible = input.type === 'text';
     input.type = visible ? 'password' : 'text';
-    btn.textContent = visible ? 'Mostrar' : 'Ocultar';
+    btn.textContent = visible ? 'Mostrar' : 'Ocultar'; btn.setAttribute('aria-pressed', String(!visible)); btn.setAttribute('aria-label', visible ? 'Mostrar contraseña' : 'Ocultar contraseña');
   });
 });
