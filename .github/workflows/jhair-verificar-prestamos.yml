@@ -1,0 +1,31 @@
+name: Jhair - Verificar préstamos y devoluciones
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  prestamos-y-devoluciones:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - name: Verificar préstamos y devoluciones
+        run: mvn -B test -Dtest=PrestamosIntegrationTest
+
+  comprobante:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Revisar sintaxis de los scripts de pedidos y pago
+        run: |
+          node --check src/main/resources/static/js/pedidos-mejoras.js
+          node --check src/main/resources/static/js/pago-mejoras.js
