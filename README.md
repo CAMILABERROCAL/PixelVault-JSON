@@ -113,8 +113,18 @@ Los datos del servidor se generan en `datos/tienda.json` y permanecen disponible
 
 Necesitas **JDK 17 y Maven 3.9 o superior**.
 
-Desde la carpeta que contiene `pom.xml`, ejecuta:
+Desde la carpeta que contiene `pom.xml`, ejecuta las pruebas:
 
 ```powershell
 mvn clean verify
+```
+
+Después inicia la aplicación:
+
+```powershell
 mvn spring-boot:run
+```
+
+Abre en tu navegador: **http://localhost:8081**
+
+Para detener la aplicación, presiona **Ctrl + C** en la terminal.
