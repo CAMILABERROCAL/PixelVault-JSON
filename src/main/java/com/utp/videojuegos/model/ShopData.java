@@ -1,6 +1,8 @@
 package com.utp.videojuegos.model;
 import java.math.BigDecimal;
 import java.util.*;
+
+// Estructura de datos para persistencia y serialización en formato JSON
 public class ShopData {
  public static class State {
   public int version = 1;

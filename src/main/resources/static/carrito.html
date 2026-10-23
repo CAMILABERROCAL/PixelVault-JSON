@@ -1,3 +1,78 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tu carrito | PixelVault</title><link rel="icon" href="/img/icon.svg" type="image/svg+xml"><link rel="stylesheet" href="/css/estilos.css"><script src="/js/script.js" defer></script></head><body data-page="cart"><header><nav class="nav" aria-label="Navegación principal"><a class="brand" href="/index.html">PIXEL<span>VAULT</span></a><div class="nav-links"><a href="/index.html#catalogo">Catálogo</a><a href="/carrito.html">Carrito <span class="count" id="cartCount">0</span></a><a href="/pedidos.html" id="ordersLink" hidden>Mis pedidos</a><a href="/login.html?next=admin" id="adminLink">Administración</a><span class="user" id="userName"></span><button id="logoutBtn" class="small ghost" hidden>Salir</button></div></nav></header><main class="wrap">
-<div class="eyebrow">Tu selección</div><h1 class="page-title">Tu próxima aventura, lista.</h1><p class="muted">Revisa tus juegos antes de continuar al pago.</p><div id="cartError" role="alert"></div><div id="cartView"></div>
-</main><footer>PIXELVAULT · Proyecto académico · Precios en soles · Los pagos son simulados, sin cargos reales.</footer><div id="toast" role="status" hidden></div></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Tu carrito | PixelVault</title>
+
+  <link rel="icon" href="/img/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/estilos.css">
+
+  <script src="/js/script.js" defer></script>
+  <script src="/js/carrito-mejoras.js" defer></script>
+</head>
+
+<body data-page="cart">
+  <header>
+    <nav class="nav" aria-label="Navegación principal">
+      <a class="brand" href="/index.html">
+        PIXEL<span>VAULT</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="/index.html#catalogo">Catálogo</a>
+
+        <a href="/carrito.html">
+          Carrito <span class="count" id="cartCount">0</span>
+        </a>
+
+        <a href="/pedidos.html" id="ordersLink" hidden>
+          Mis pedidos
+        </a>
+
+        <a href="/login.html?next=admin" id="adminLink">
+          Administración
+        </a>
+
+        <span class="user" id="userName"></span>
+
+        <button id="logoutBtn" class="small ghost" hidden>
+          Salir
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <div class="eyebrow">Tu selección</div>
+
+    <h1 class="page-title">Tu próxima aventura, lista.</h1>
+
+    <p class="muted">
+      Revisa tus juegos antes de continuar al pago.
+    </p>
+
+    <div id="cartError" role="alert"></div>
+
+    <div class="actions" style="margin-bottom:20px">
+      <button
+        type="button"
+        id="clearCartBtn"
+        class="ghost danger"
+      >
+        Vaciar carrito
+      </button>
+    </div>
+
+    <div id="cartView"></div>
+  </main>
+
+  <footer>
+    PIXELVAULT · Proyecto académico · Precios en soles ·
+    Los pagos son simulados, sin cargos reales.
+  </footer>
+
+  <div id="toast" role="status" hidden></div>
+</body>
+</html>

@@ -34,3 +34,30 @@ No se registraron errores de JavaScript durante ese recorrido. Se inspeccionaron
 - Dockerfile y Compose están incluidos. No se ejecutó la construcción Docker en este entorno porque no dispone de Docker; la Action preparada incluye esa comprobación al subir el proyecto.
 - La Action se proporciona como código. Aún no se ha ejecutado en un repositorio de GitHub nuevo.
 - No se ha desplegado la tienda en un hosting público ni se ha creado un repositorio.
+
+
+## Mejoras de pedidos y pago
+
+Cambios solo en el navegador: `js/pedidos-mejoras.js`, `js/pago-mejoras.js`, `pedidos.html` y `pago.html`. No se modificó `script.js` ni el servidor.
+
+### Qué se agregó
+
+- **Comprobante TXT:** cada pedido de "Mis pedidos" tiene el botón "Descargar comprobante (TXT)". El archivo incluye número de pedido, fecha, cliente, método de pago, productos, cantidades y total, e indica que no es un comprobante fiscal ni un cobro real. El panel de administración no muestra el botón.
+- **Métodos de pago:** en la pantalla de pago se explica qué hace la tarjeta de prueba y Yape de prueba, y qué ocurre en el escenario aprobado y en el rechazado. El texto cambia al elegir otra opción.
+- **Regreso al carrito:** botón "Volver al carrito" debajo de "Confirmar pago simulado" y enlace dentro del mensaje de error tras un pago rechazado.
+
+### Cómo se comprobó
+
+1. `node --check` sin errores en `pedidos-mejoras.js`, `pago-mejoras.js` y `pruebas/comprobante-txt.js`.
+2. Prueba de consola `pruebas/comprobante-txt.js` en `/pedidos.html` (con al menos un pedido): verifica los datos y avisos del texto, el tipo y el nombre del archivo, y que su contenido coincide. Resultado esperado: `OK: el comprobante (...) incluye todos los datos y avisos.`
+3. Revisión manual en `/pago.html`: la ayuda cambia al elegir método o escenario; con "Pago rechazado" aparece el mensaje de error con el enlace "Volver al carrito" y el carrito se conserva.
+
+### Límites
+
+- El comprobante es de demostración; no reemplaza un comprobante de pago real.
+- La prueba se ejecuta a mano en la consola del navegador (igual que las del carrito); no forma parte de `mvn verify`.
+
+## Scripts de prueba de consola (Frontend)
+
+- `pruebas/carrito-confirmacion.js`: verifica el vaciado del carrito tras confirmación y la persistencia en `localStorage`.
+- `pruebas/carrito-cancelacion.js`: comprueba que cancelar la operación conserve intactos los productos, cantidades y total.
