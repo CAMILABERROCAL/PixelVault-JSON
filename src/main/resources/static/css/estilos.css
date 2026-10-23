@@ -11,3 +11,19 @@
   font-size: 0.8rem;
   cursor: pointer;
 }
+/* Indicador de longitud de contraseña */
+.pass-meter {
+  height: 6px;
+  margin: 0.4rem 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+}
+.pass-meter span {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: #4caf50;
+  transition: width 0.2s ease;
+}

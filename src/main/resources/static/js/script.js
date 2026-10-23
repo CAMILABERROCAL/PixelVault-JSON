@@ -135,3 +135,15 @@ document.querySelectorAll('.pass-toggle').forEach(function (btn) {
     btn.textContent = visible ? 'Mostrar' : 'Ocultar'; btn.setAttribute('aria-pressed', String(!visible)); btn.setAttribute('aria-label', visible ? 'Mostrar contraseña' : 'Ocultar contraseña');
   });
 });
+// Indicador de longitud de contraseña
+(function () {
+  var input = document.getElementById('password');
+  var bar = document.getElementById('passBar');
+  var count = document.getElementById('passCount');
+  if (!input || !bar || !count) return;
+  input.addEventListener('input', function () {
+    var len = input.value.length;
+    count.textContent = len + ' de 64 caracteres';
+    bar.style.width = Math.min(len / 8, 1) * 100 + '%'; var hint = document.getElementById('passHint'); if (hint) { hint.textContent = len === 0 ? 'Entre 8 y 64 caracteres.' : len < 8 ? 'Te faltan ' + (8 - len) + ' caracteres para llegar al mínimo.' : 'Longitud correcta. Ya puedes crear tu cuenta.'; }
+  });
+})();
