@@ -208,9 +208,7 @@ async function catalog() {
     list.sort(
       $('#sort').value === 'stockDesc'
         ? (a, b) => b.stock - a.stock
-        : $('#sort').value === 'priceDesc'
-          ? (a, b) => b.precio - a.precio
-          : (a, b) => a.titulo.localeCompare(b.titulo)
+        : (a, b) => a.titulo.localeCompare(b.titulo)
     );
 
     $('#catalogCount').textContent =
@@ -230,7 +228,7 @@ async function catalog() {
           </div>
           <h3>${esc(product.titulo)}</h3>
           <div class="row">
-            <span class="tiny muted">Biblioteca escolar</span>
+            <span class="tiny muted">Préstamo por 7 días</span>
             <span class="stock ${
               product.stock === 0 ? 'out' : product.stock <= 5 ? 'low' : ''
             }">
@@ -324,48 +322,12 @@ function cartDetails() {
   }));
 }
 
-function totals(items) {
-  return items.reduce(
-    (total, item) =>
-      total + (item.game ? item.game.precio * item.cantidad : 0),
-    0
-  );
-}
-
 function validCart(items) {
   return items.length > 0 && items.every(item =>
     item.game &&
     item.game.activo &&
     item.game.stock >= item.cantidad
   );
-}
-
-function summary(items, button) {
-  return `
-    <aside class="panel summary">
-      <h2>Resumen</h2>
-      <div class="row">
-        <span class="muted">Unidades</span>
-        <span>${items.reduce((total, item) => total + item.cantidad, 0)}</span>
-      </div>
-      <div class="row">
-        <span class="muted">Subtotal</span>
-        <span>${money(totals(items))}</span>
-      </div>
-      <div class="row">
-        <span class="muted">Costos adicionales</span>
-        <span>${money(0)}</span>
-      </div>
-      <div class="row total">
-        <span>Total</span>
-        <span>${money(totals(items))}</span>
-      </div>
-      ${button}
-      <p class="tiny muted" style="margin-top:16px">
-        Demostración académica. No se realiza ningún cobro real.
-      </p>
-    </aside>
-  `;
 }
 
 // Selección de libros de AulaLibro.
@@ -408,7 +370,7 @@ async function cartPage() {
               >
               <div>
                 <h3>${esc(item.game?.titulo || 'Libro no disponible')}</h3>
-                <p class="muted tiny">${esc(item.game?.autor || '')}</p>
+                <p class="muted tiny">${esc(item.game?.autor || item.game?.plataforma || '')}</p>
                 <div class="qty">
                   <label for="qty-${item.videojuegoId}">
                     Ejemplares
@@ -461,7 +423,7 @@ async function cartPage() {
             style="margin-top:18px"
             ${validCart(items) ? '' : 'disabled'}
           >
-            Continuar →
+            Solicitar préstamo →
           </button>
           ${!me.autenticado
             ? '<p class="tiny muted">Inicia sesión en el siguiente paso para continuar.</p>'
@@ -560,7 +522,7 @@ async function authPage(register = false) {
     if (next === 'admin' && me.rol !== 'ADMIN') {
       notice(
         '#authMessage',
-        'Tu cuenta es de cliente. Usa una cuenta administradora para entrar al panel.'
+        'Tu cuenta es de lector. Usa una cuenta administradora para entrar al panel.'
       );
       return;
     }
@@ -608,7 +570,7 @@ async function authPage(register = false) {
           await nav();
           notice(
             '#authMessage',
-            'Accediste como cliente. El panel requiere una cuenta administradora.'
+            'Accediste como lector. El panel requiere una cuenta administradora.'
           );
           return;
         }
@@ -634,200 +596,82 @@ async function authPage(register = false) {
   }
 }
 
-async function payment() {
-  if (!me.autenticado) {
-    location.replace('/login.html?next=pagar');
-    return;
-  }
 
+const loanDay = value => new Intl.DateTimeFormat('es-PE', {
+  dateStyle: 'long', timeZone: 'America/Lima'
+}).format(new Date(value + 'T12:00:00-05:00'));
+
+async function payment() {
+  if (!me.autenticado) { location.replace('/login.html?next=pagar'); return; }
   products = await api('/api/videojuegos');
   const items = cartDetails();
-
   if (!validCart(items)) {
-    $('#paymentView').innerHTML = `
-      <div class="empty">
-        <h2>Revisa tu carrito</h2>
-        <p>Está vacío o cambió la disponibilidad de un juego.</p>
-        <a class="btn primary" href="/carrito.html">Volver al carrito</a>
-      </div>
-    `;
+    $('#paymentView').innerHTML = '<div class="empty"><h2>Revisa tu selección</h2><p>Está vacía o cambió la disponibilidad de un libro.</p><a class="btn primary" href="/carrito.html">Volver a mi selección</a></div>';
     return;
   }
-
+  const signature = JSON.stringify(readCart());
   $('#paymentView').innerHTML = `
-    <div class="split">
-      <section class="panel">
-        <span class="pill">PASARELA DE DEMOSTRACIÓN</span>
-        <h2 style="margin-top:20px">Elige un método de prueba</h2>
-        <p class="muted">
-          Comprando como <strong>${esc(me.correo)}</strong>
-        </p>
-        <div class="notice">
-          Este pago es simulado. No ingreses números de tarjeta,
-          CVV ni datos bancarios reales.
-        </div>
-        <form id="payForm">
-          <div class="pay-options">
-            <label class="pay-option">
-              <input
-                type="radio"
-                name="metodo"
-                value="TARJETA_DEMO"
-                checked
-              >
-              <span>▣ Tarjeta de prueba</span>
-            </label>
-            <label class="pay-option">
-              <input type="radio" name="metodo" value="YAPE_DEMO">
-              <span>◈ Yape de prueba</span>
-            </label>
-          </div>
-
-          <label for="outcome">Escenario de la simulación</label>
-          <select id="outcome" name="resultado">
-            <option value="APROBADO">Pago aprobado</option>
-            <option value="RECHAZADO">Pago rechazado (para probar)</option>
-          </select>
-
-          <label class="pay-option" style="margin-top:20px">
-            <input type="checkbox" required>
-            <span class="tiny">
-              Entiendo que es una compra de demostración
-              y no habrá cargos reales.
-            </span>
-          </label>
-
-          <button class="primary full" id="payButton" style="margin-top:15px">
-            Confirmar pago simulado · ${money(totals(items))}
-          </button>
-        </form>
-      </section>
-
-      ${summary(
-        items,
-        items.map(item => `
-          <p class="tiny">${esc(item.game.titulo)} × ${item.cantidad}</p>
-        `).join('')
-      )}
-    </div>
-  `;
-
+    <div class="split"><section class="panel">
+      <span class="pill">PRÉSTAMO GRATUITO · 7 DÍAS</span>
+      <h2 style="margin-top:20px">Una nueva lectura te espera</h2>
+      <p class="muted">Solicitando como <strong>${esc(me.correo)}</strong></p>
+      <p>El plazo comienza al confirmar. La fecha límite exacta quedará registrada en Mis préstamos. Devuelve los ejemplares en la biblioteca para que el administrador registre su recepción.</p>
+      <form id="payForm">
+        <label class="pay-option"><input type="checkbox" required><span>Me comprometo a cuidar los libros y devolverlos dentro de los 7 días.</span></label>
+        <button class="primary full" id="payButton">Confirmar préstamo gratuito</button>
+      </form>
+    </section><aside class="panel summary"><h2>Tu selección</h2>
+      ${items.map(i => `<div class="row"><span>${esc(i.game.titulo)}</span><strong>× ${i.cantidad}</strong></div>`).join('')}
+      <p class="notice">Sin pagos ni cargos. Plazo: 7 días calendario.</p>
+    </aside></div>`;
   $('#payForm').onsubmit = async event => {
     event.preventDefault();
-
     const button = $('#payButton');
     button.disabled = true;
-    button.textContent = 'Procesando…';
     notice('#paymentError', '');
-
     try {
-      const lines = readCart();
-      const signature = JSON.stringify(lines);
-      let key = sessionStorage.getItem('pixelvault.pay.key');
-
-      if (
-        !key ||
-        sessionStorage.getItem('pixelvault.pay.cart') !== signature
-      ) {
+      if (JSON.stringify(readCart()) !== signature) throw new Error('La selección cambió. Recarga esta página antes de confirmar.');
+      let key = sessionStorage.getItem('aulalibro.loan.key');
+      if (!key || sessionStorage.getItem('aulalibro.loan.items') !== signature) {
         key = crypto.randomUUID();
-        sessionStorage.setItem('pixelvault.pay.key', key);
-        sessionStorage.setItem('pixelvault.pay.cart', signature);
+        sessionStorage.setItem('aulalibro.loan.key', key);
+        sessionStorage.setItem('aulalibro.loan.items', signature);
       }
-
-      const form = Object.fromEntries(new FormData(event.target));
-
-      const order = await api('/api/pedidos', {
-        method: 'POST',
-        body: JSON.stringify({
-          items: lines,
-          metodo: form.metodo,
-          resultado: form.resultado,
-          clave: key
-        })
-      });
-
-      saveCart([]);
-      sessionStorage.removeItem('pixelvault.pay.key');
-      sessionStorage.removeItem('pixelvault.pay.cart');
-      location.href = '/pedidos.html?pedido=' + encodeURIComponent(order.id);
+      const loan = await api('/api/prestamos', { method: 'POST', body: JSON.stringify({items: readCart(), clave: key}) });
+      // Una falla de almacenamiento local no debe crear otro préstamo.
+      try {
+        saveCart([]);
+        sessionStorage.removeItem('aulalibro.loan.key');
+        sessionStorage.removeItem('aulalibro.loan.items');
+      } catch {}
+      location.href = '/pedidos.html?prestamo=' + encodeURIComponent(loan.id);
     } catch (error) {
       notice('#paymentError', error.message);
-
-      if (error.status === 401) {
-        location.href = '/login.html?next=pagar';
-        return;
-      }
-
-      if (error.status === 409) {
-        notice(
-          '#paymentError',
-          error.message + ' Vuelve al carrito para actualizar la disponibilidad.'
-        );
-      }
-    } finally {
-      button.disabled = false;
-      button.textContent =
-        'Confirmar pago simulado · ' + money(totals(items));
-    }
+      if (error.status === 401) location.href = '/login.html?next=pagar';
+    } finally { button.disabled = false; }
   };
 }
 
-function orderMarkup(order, admin = false) {
-  const focus = new URLSearchParams(location.search).get('pedido') === order.id;
-
-  return `
-    <article class="panel ${focus ? 'focus-order' : ''}">
-      ${focus ? `
-        <div class="notice success">
-          ¡Compra de demostración confirmada! Tu pedido quedó registrado.
-        </div>
-      ` : ''}
-
-      <div class="order-head">
-        <div>
-          <div class="eyebrow">Pedido ${esc(order.id.slice(0, 8))}</div>
-          <h3>${esc(date(order.fecha))}</h3>
-          ${admin ? `<p class="muted tiny">${esc(order.usuario)}</p>` : ''}
-        </div>
-        <div>
-          <span class="pill">Pagado · simulación</span>
-          <p class="price" style="margin-top:10px;margin-bottom:0">
-            ${money(order.total)}
-          </p>
-        </div>
-      </div>
-
-      <div class="order-lines">
-        ${order.items.map(item => `
-          <div class="row">
-            <span>${esc(item.titulo)} × ${item.cantidad}</span>
-            <span>${money(item.precio * item.cantidad)}</span>
-          </div>
-        `).join('')}
-      </div>
-
-      <p class="tiny muted" style="margin-bottom:0">
-        ${order.metodo === 'YAPE_DEMO' ? 'Yape' : 'Tarjeta'} de prueba ·
-        No constituye un cobro real ni una licencia activable.
-      </p>
-    </article>
-  `;
+function orderMarkup(loan, admin = false) {
+  const focus = new URLSearchParams(location.search).get('prestamo') === loan.id;
+  return `<article class="panel ${focus ? 'focus-order' : ''}">
+    ${focus ? '<div class="notice success">Préstamo registrado correctamente.</div>' : ''}
+    <div class="order-head"><div><div class="eyebrow">Préstamo ${esc(loan.id.slice(0,8))}</div>
+      <h3>${esc(date(loan.fecha))}</h3>
+      ${admin ? `<p class="muted">${esc(loan.usuario)}</p>` : ''}
+    </div><span class="pill">${esc(loan.estado)}</span></div>
+    <div class="order-lines">${loan.items.map(i => `<div class="row"><span>${esc(i.titulo)}</span><strong>${i.cantidad} ejemplar(es)</strong></div>`).join('')}</div>
+    <p>Devolver hasta el <strong>${esc(loanDay(loan.fechaLimite))}</strong>.</p>
+    ${loan.fechaDevolucion ? `<p class="stock">Devolución registrada: ${esc(date(loan.fechaDevolucion))}</p>` : ''}
+    ${admin && loan.estado !== 'DEVUELTO' ? `<button class="primary" data-return="${esc(loan.id)}">Registrar devolución</button>` : ''}
+  </article>`;
 }
 
 async function ordersPage() {
-  if (!me.autenticado) {
-    location.replace('/login.html?next=pedidos');
-    return;
-  }
-
-  const orders = await api('/api/pedidos');
-
-  $('#orders').innerHTML = orders.map(order => orderMarkup(order)).join('') || `
-    <div class="empty">
-      <h2>Todavía no tienes pedidos</h2>
-      <p>Tu primera aventura te espera en el catálogo.</p>
-    </div>
-  `;
+  if (!me.autenticado) { location.replace('/login.html?next=pedidos'); return; }
+  const loans = await api('/api/prestamos');
+  $('#orders').innerHTML = loans.map(l => orderMarkup(l)).join('') ||
+    '<div class="empty"><h2>Todavía no tienes préstamos</h2><p>Encuentra tu próxima lectura en el catálogo.</p><a class="btn primary" href="/index.html">Explorar libros</a></div>';
 }
 
 async function adminPage() {
@@ -850,11 +694,11 @@ async function adminPage() {
 
   async function render() {
     products = await api('/api/videojuegos');
-    orders = await api('/api/admin/pedidos');
+    orders = await api('/api/admin/prestamos');
 
     $('#metrics').innerHTML = `
       <div class="panel">
-        <span class="muted tiny">Videojuegos</span>
+        <span class="muted tiny">Libros</span>
         <strong>${products.length}</strong>
       </div>
       <div class="panel">
@@ -862,8 +706,8 @@ async function adminPage() {
         <strong>${products.reduce((total, product) => total + product.stock, 0)}</strong>
       </div>
       <div class="panel">
-        <span class="muted tiny">Ventas simuladas</span>
-        <strong>${money(orders.reduce((total, order) => total + order.total, 0))}</strong>
+        <span class="muted tiny">Préstamos pendientes</span>
+        <strong>${orders.filter(loan => loan.estado !== 'DEVUELTO').length}</strong>
       </div>
     `;
 
@@ -874,7 +718,7 @@ async function adminPage() {
           <span class="tiny muted">${esc(product.genero)}</span>
         </td>
         <td>${esc(product.plataforma)}</td>
-        <td>${money(product.precio)}</td>
+        <td>7 días</td>
         <td>${product.stock}</td>
         <td>${product.activo ? 'Publicado' : 'Oculto'}</td>
         <td>
@@ -888,13 +732,13 @@ async function adminPage() {
       </tr>
     `).join('') || `
       <tr>
-        <td colspan="6">No hay videojuegos. Agrega el primero.</td>
+        <td colspan="6">No hay libros. Agrega el primero.</td>
       </tr>
     `;
 
     $('#adminOrders').innerHTML =
       orders.map(order => orderMarkup(order, true)).join('') ||
-      '<p class="muted">Todavía no hay pedidos.</p>';
+      '<p class="muted">Todavía no hay préstamos.</p>';
   }
 
   const form = $('#productForm');
@@ -908,7 +752,6 @@ async function adminPage() {
       'descripcion',
       'genero',
       'plataforma',
-      'precio',
       'stock',
       'imagenUrl'
     ]) {
@@ -917,13 +760,25 @@ async function adminPage() {
 
     form.elements.activo.value = String(product?.activo ?? true);
     $('#productTitle').textContent = product
-      ? 'Editar videojuego'
-      : 'Nuevo videojuego';
+      ? 'Editar libro'
+      : 'Nuevo libro';
 
     notice('#productError', '');
     $('#productDialog').showModal();
   }
 
+  $('#adminOrders').onclick = async event => {
+    const button = event.target.closest('[data-return]');
+    if (!button || !confirm('¿Confirmas que recibiste todos los ejemplares de este préstamo?')) return;
+    button.disabled = true;
+    try {
+      await api('/api/admin/prestamos/' + encodeURIComponent(button.dataset.return) + '/devolucion', {method:'POST'});
+      notice('#adminError', '');
+      await render();
+      toast('Devolución registrada. Ejemplares repuestos.');
+    } catch(error) { notice('#adminError', error.message); }
+    finally { button.disabled = false; }
+  };
   $('#newProduct').onclick = () => open(null);
   $('#closeProduct').onclick = () => $('#productDialog').close();
 
@@ -937,7 +792,7 @@ async function adminPage() {
 
     if (remove) {
       if (!confirm(
-        '¿Eliminar el videojuego? Los pedidos anteriores se conservarán.'
+        '¿Eliminar el libro? Los registros anteriores se conservarán.'
       )) {
         return;
       }
@@ -950,7 +805,7 @@ async function adminPage() {
         });
 
         await render();
-        toast('Videojuego eliminado.');
+        toast('Libro eliminado.');
       } catch (error) {
         notice('#adminError', error.message);
       } finally {
@@ -971,7 +826,7 @@ async function adminPage() {
       const id = data.id;
       delete data.id;
 
-      data.precio = Number(data.precio);
+      data.precio = 0;
       data.stock = Number(data.stock);
       data.activo = data.activo === 'true';
 
@@ -982,7 +837,7 @@ async function adminPage() {
 
       $('#productDialog').close();
       await render();
-      toast('Videojuego guardado.');
+      toast('Libro guardado.');
     } catch (error) {
       notice('#productError', error.message);
     } finally {
