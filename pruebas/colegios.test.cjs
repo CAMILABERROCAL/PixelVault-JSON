@@ -1,0 +1,16 @@
+const test=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const {seleccionar,criterios}=require('../web/js/colegios-core.js');
+const catalogo=JSON.parse(fs.readFileSync('web/datos/colegios.json','utf8')).colegios;
+const base={texto:'',gestion:'',nivel:'',zona:'',min:null,max:null,incluirDesconocidos:true,orden:'nombre'};
+const elegir=f=>seleccionar(catalogo,{...base,...f});
+test('catálogo válido: IDs únicos, fuentes HTTPS y valores desconocidos nulos',()=>{assert.equal(new Set(catalogo.map(c=>c.id)).size,catalogo.length);for(const c of catalogo){assert.ok(c.nombre&&c.direccion);assert.ok(['privado','publico'].includes(c.gestion));assert.ok(c.fuentes.length);for(const u of c.fuentes)assert.equal(new URL(u).protocol,'https:');for(const k of ['pension','matricula','cuotaIngreso'])assert.ok(c[k]===null||(Number.isFinite(c[k])&&c[k]>=0));}});
+test('búsqueda sin acentos y por dirección',()=>{assert.ok(elegir({texto:'republica'}).some(c=>c.id==='ie7091'));assert.ok(elegir({texto:'álamos'}).some(c=>c.id==='ie6066'));});
+test('gestión y nivel son filtros independientes',()=>{const r=elegir({gestion:'publico',nivel:'inicial'});assert.ok(r.length);assert.ok(r.every(c=>c.gestion==='publico'&&c.niveles.includes('inicial')));});
+test('una búsqueda inexistente devuelve cero resultados',()=>assert.equal(elegir({texto:'zzzz-colegio-inexistente'}).length,0));
+test('presupuesto distingue una pensión desconocida de cero',()=>{const r=elegir({gestion:'privado',max:300,incluirDesconocidos:false});assert.equal(r.length,0);assert.ok(elegir({gestion:'privado',max:300}).length>0);});
+test('límites de precio incluidos y datos desconocidos ordenados al final',()=>{const muestra=[{...catalogo[0],id:'a',pension:300},{...catalogo[0],id:'b',pension:301},{...catalogo[0],id:'c',pension:null}];assert.deepEqual(seleccionar(muestra,{...base,min:100,max:300,incluirDesconocidos:false}).map(c=>c.id),['a']);assert.deepEqual(seleccionar(muestra,{...base,orden:'precio'}).map(c=>c.id),['a','b','c']);});
+test('rango invertido o negativo genera un error claro',()=>{assert.throws(()=>elegir({min:500,max:100}),/mínimo/);assert.throws(()=>elegir({min:-1}),/cero/);});
+test('ranking cuenta criterios sin fabricar calidad y respeta búsqueda textual',()=>{const r=elegir({gestion:'publico',nivel:'inicial',orden:'ranking'});assert.equal(r[0].coincidencia.aciertos,2);assert.equal(r[0].coincidencia.total,2);assert.equal(criterios(catalogo[0],{...base,max:200}).aciertos,0);assert.ok(elegir({texto:'innova',orden:'ranking',nivel:'primaria'}).every(c=>c.nombre.includes('Innova')));});
+test('ordenar no modifica el catálogo original',()=>{const antes=JSON.stringify(catalogo);elegir({orden:'precio'});assert.equal(JSON.stringify(catalogo),antes);});

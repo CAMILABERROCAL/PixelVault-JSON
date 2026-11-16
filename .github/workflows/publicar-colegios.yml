@@ -1,0 +1,45 @@
+name: Camila - Publicar directorio de colegios
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'web/**'
+      - 'pruebas/colegios.test.cjs'
+      - '.github/workflows/publicar-colegios.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: pages-colegios
+  cancel-in-progress: false
+jobs:
+  preparar:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Comprobar JavaScript y filtros
+        run: |
+          node --check web/js/app.js
+          node --check web/js/colegios-core.js
+          node --test pruebas/colegios.test.cjs
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+  publicar:
+    needs: preparar
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar web
+        id: deployment
+        uses: actions/deploy-pages@v4
