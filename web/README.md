@@ -13,22 +13,39 @@ Abrir http://localhost:5500. No abrir index.html por doble clic: la lectura del 
 
 ## Funciones
 - Búsqueda tolerante a tildes por nombre, sede y dirección.
-- Filtros independientes por gestión, nivel, zona y rango de pensión.
+- Filtros independientes por gestión, nivel y rango de pensión.
 - Tarjetas y detalle accesible con teclado (Escape cierra la ventana).
 - Contacto telefónico, mapa por dirección y enlaces de fuentes.
 - Orden alfabético, por pensión publicada y coincidencia con preferencias.
 - Diseño adaptable a teléfono y escritorio.
 
 ## Ranking propuesto
-El orden por coincidencia asigna un punto a cada criterio seleccionado y satisfecho: gestión, nivel, zona y presupuesto. Muestra aciertos/total, no estrellas ni calidad educativa. Los valores desconocidos no suman. La búsqueda textual siempre se respeta; en modo coincidencia se incluyen alternativas que pueden no cumplir todos los criterios. Sin criterios, se ordena por nombre. Los públicos se consideran compatibles con el presupuesto de pensión, independientemente del mínimo introducido. Esta metodología es una propuesta para acordar con el equipo/docente.
+El orden por coincidencia asigna un punto a cada criterio seleccionado y satisfecho: gestión, nivel y presupuesto. Muestra aciertos/total, no estrellas ni calidad educativa. Los valores desconocidos no suman. La búsqueda textual siempre se respeta; en modo coincidencia se incluyen alternativas que pueden no cumplir todos los criterios. Sin criterios, se ordena por nombre. Los públicos se consideran compatibles con el presupuesto de pensión, independientemente del mínimo introducido. Esta metodología es una propuesta para acordar con el equipo/docente.
 
-## Catálogo y pendientes de contenido
-`datos/colegios.json` contiene seis fichas iniciales de fuentes oficiales consultadas el 16/11/2026. No es un listado exhaustivo. Verificar cada sede/nivel antes de ampliar la información.
-- No se encontraron tarifarios verificados en las páginas consultadas: importes `null` se muestran como Consultar, nunca como cero.
-- En Laderas de Villa los niveles quedan vacíos hasta confirmación específica de sede.
-- Los logos oficiales están pendientes. Se usa un emblema genérico identificado como referencial, no un escudo inventado. Para añadir uno, guardar el archivo en `web/img/` y establecer `logo` como `./img/nombre.png` (SVG, PNG, WEBP o JPG).
-- No hay opiniones, calificaciones ni precios inventados. Las fuentes están en cada ficha.
-- Para añadir precios, indicar importes numéricos, año de referencia y enlace del tarifario en fuentes; revisar el año antes de cada entrega.
+## Catálogo y edición manual
+`datos/colegios.json` contiene exactamente 10 colegios seleccionados por Camila: 5 privados (Pamer, Saco Oliveros, Trilce, Innova Laderas, María Auxiliadora) y 5 públicos (6066, 7091, 6048, 6063, 6065). Se retiraron IE 557 e Innova Vallejo. No hay filtro de zonas ni categoría nidos. Inicial puede aparecer únicamente como información del colegio en sus niveles.
+
+### Añadir imágenes, Facebook y Maps desde VS Code
+Busca el nombre del colegio en `web/datos/colegios.json`. Completa los campos vacíos, conservando las comillas y comas:
+
+```json
+"imagenUrl": "",
+"facebookUrl": "",
+"googleMapsUrl": ""
+```
+
+- `imagenUrl`: pegar una URL HTTPS directa que sirva una imagen (no un enlace de búsqueda de Google ni una página de Facebook). También admite una imagen guardada en `web/img/`, por ejemplo `./img/pamer.png`. Las imágenes externas pueden caducar o bloquear su carga; guardar el archivo local suele ser más estable.
+- `facebookUrl`: URL HTTPS de la página oficial del colegio.
+- `googleMapsUrl`: enlace HTTPS de la ubicación exacta copiado desde Compartir en Google Maps. Se admiten enlaces cortos `https://maps.app.goo.gl/...`.
+- Si la imagen falta o falla, se conserva un cuadrado vacío. No aparecen iniciales ni un escudo inventado.
+- Si falta un enlace, se muestra como pendiente y no es clicable. No se genera una búsqueda de Maps que pueda apuntar a otro colegio.
+- Una misma imagen aparece en la tarjeta y en la ventana de detalle.
+- Tras guardar, recarga el navegador. Para actualizar la web online, incorpora el cambio al flujo Git y publica desde main.
+
+### Datos pendientes de confirmación
+Las direcciones aportadas por el equipo se mantienen. En Pamer, Saco Oliveros, María Auxiliadora y República del Perú hay referencias pendientes de contrastar o diferencias entre fuentes: `notaUbicacion` las explica en el detalle. `referenciaEquipo` conserva el enlace de búsqueda proporcionado por Camila; no equivale a un enlace exacto de Maps ni a una fuente ya verificada. `fuentes` recoge páginas consultadas, oficiales cuando estuvieron disponibles y directorios secundarios identificados en los demás casos.
+
+No hay importes inventados: `null` se muestra como Consultar. Al incorporar costos, indicar año y fuente del tarifario. Los niveles de Innova Laderas permanecen pendientes de confirmación específica de sede. La fecha del catálogo es la de edición, no una garantía de vigencia de todos los datos.
 
 ## Pruebas
 Desde la raíz:

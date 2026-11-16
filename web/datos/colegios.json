@@ -1,11 +1,270 @@
 {
   "actualizado": "2026-11-16",
   "colegios": [
-    {"id":"saco-ves","nombre":"Saco Oliveros","sede":"Villa El Salvador","gestion":"privado","niveles":["primaria","secundaria"],"zona":"Av. Revolución","direccion":"Av. Revolución s/n con 1.º de Mayo, Paradero Parroquia","telefono":"016805300","turno":"Mañana; tarde en secundaria","descripcion":"Sede de la red Saco Oliveros en Villa El Salvador. Consulta directamente la disponibilidad por grado y sus condiciones de admisión.","logo":null,"pension":null,"matricula":null,"cuotaIngreso":null,"anioCostos":null,"fuentes":["https://sacooliveros.edu.pe/colegios/sedes/villa-el-salvador"]},
-    {"id":"innova-vallejo","nombre":"Innova Schools","sede":"VES Vallejo","gestion":"privado","niveles":["inicial","primaria","secundaria"],"zona":"Vallejo / Magisterio","direccion":"Calle 6 s/n, lote 38, Villa El Salvador","telefono":"017304555","turno":null,"descripcion":"Sede Vallejo, a una cuadra del cruce de la avenida Vallejo con Ruta E (Magisterio). Verifica con la institución los grados y las vacantes disponibles.","logo":null,"pension":null,"matricula":null,"cuotaIngreso":null,"anioCostos":null,"fuentes":["https://www.innovaschools.edu.pe/sedes/lima/villa-el-salvador/ves-vallejo","https://www.innovaschools.edu.pe/sedes"]},
-    {"id":"innova-laderas","nombre":"Innova Schools","sede":"VES Laderas de Villa","gestion":"privado","niveles":[],"zona":"Laderas de Villa","direccion":"Prolongación Mateo Pumacahua s/n, cruce con Av. Mariano Pastor Sevilla","telefono":"017304555","turno":null,"descripcion":"Sede cercana al Óvalo Cocharcas y al Hospital de la Solidaridad. Los niveles de esta sede están pendientes de confirmación en este directorio.","logo":null,"pension":null,"matricula":null,"cuotaIngreso":null,"anioCostos":null,"fuentes":["https://www.innovaschools.edu.pe/sedes/lima/villa-el-salvador/ves-laderas-de-villa"]},
-    {"id":"ie6066","nombre":"IE 6066 Villa El Salvador","sede":"Sector 2","gestion":"publico","niveles":["primaria","secundaria"],"zona":"Sector 2","direccion":"Av. Los Álamos s/n, sector 2","telefono":"995269921","turno":"Mañana y tarde","descripcion":"Institución pública de gestión directa. Los servicios de primaria y secundaria figuran por separado en Identicole, con el mismo local educativo.","logo":null,"pension":null,"matricula":null,"cuotaIngreso":null,"anioCostos":null,"fuentes":["https://identicole.minedu.gob.pe/colegio/mi_colegio/03284270","https://identicole.minedu.gob.pe/colegio/05024350"]},
-    {"id":"ie557","nombre":"IE Inicial 557","sede":"Etapa I","gestion":"publico","niveles":["inicial"],"zona":"Etapa I","direccion":"Mz. N, etapa I, Villa El Salvador","telefono":"980247560","turno":"Mañana y tarde","descripcion":"Institución pública de educación inicial, modalidad jardín, registrada en Identicole. Consulta las edades de atención y el proceso de matrícula con la institución.","logo":null,"pension":null,"matricula":null,"cuotaIngreso":null,"anioCostos":null,"fuentes":["https://identicole.minedu.gob.pe/colegio/mi_colegio/06941660"]},
-    {"id":"ie7091","nombre":"IE 7091 República del Perú","sede":"Inicial · Sector 7","gestion":"publico","niveles":["inicial"],"zona":"Sector 7","direccion":"Mz. E, sector 7, Villa El Salvador","telefono":"959481737","turno":"Mañana y tarde","descripcion":"Ficha correspondiente al servicio de inicial, modalidad cuna-jardín. La información de otros niveles no está incluida en esta ficha.","logo":null,"pension":null,"matricula":null,"cuotaIngreso":null,"anioCostos":null,"fuentes":["https://identicole.minedu.gob.pe/colegio/14749800"]}
+    {
+      "id": "pamer-ves",
+      "nombre": "Colegio Pamer",
+      "sede": "Villa El Salvador",
+      "gestion": "privado",
+      "niveles": [
+        "primaria",
+        "secundaria"
+      ],
+      "direccion": "Sector 3, grupo 16",
+      "imagenUrl": "",
+      "facebookUrl": "",
+      "googleMapsUrl": "",
+      "telefono": null,
+      "turno": null,
+      "descripcion": "Colegio Pamer, institución de gestión privada en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
+      "notaUbicacion": "Dirección indicada por el equipo. Pendiente de contrastar el local exacto mediante el enlace de Google Maps.",
+      "pension": null,
+      "matricula": null,
+      "cuotaIngreso": null,
+      "anioCostos": null,
+      "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F11cms33hr5",
+      "fuentes": [
+        "https://pamervillaelsalvador.edu.pe/ves/comunicados/RI2025.pdf?_t=1745849773"
+      ]
+    },
+    {
+      "id": "saco-ves",
+      "nombre": "Colegio Saco Oliveros",
+      "sede": "Villa El Salvador",
+      "gestion": "privado",
+      "niveles": [
+        "primaria",
+        "secundaria"
+      ],
+      "direccion": "Av. Revolución 418",
+      "imagenUrl": "",
+      "facebookUrl": "",
+      "googleMapsUrl": "",
+      "telefono": "016805300",
+      "turno": null,
+      "descripcion": "Colegio Saco Oliveros, institución de gestión privada en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
+      "notaUbicacion": "Dirección indicada por el equipo: Av. Revolución 418. El sitio institucional describe Av. Revolución s/n con 1.º de Mayo; confirmar la numeración y entrada en Google Maps.",
+      "pension": null,
+      "matricula": null,
+      "cuotaIngreso": null,
+      "anioCostos": null,
+      "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F11fx8h64zj",
+      "fuentes": [
+        "https://sacooliveros.edu.pe/colegios/sedes/villa-el-salvador"
+      ]
+    },
+    {
+      "id": "trilce-ves",
+      "nombre": "Colegio Trilce",
+      "sede": "Villa El Salvador",
+      "gestion": "privado",
+      "niveles": [
+        "inicial",
+        "primaria",
+        "secundaria"
+      ],
+      "direccion": "Av. Separadora Agroindustrial, subparcela 34 A-2",
+      "imagenUrl": "",
+      "facebookUrl": "",
+      "googleMapsUrl": "",
+      "telefono": null,
+      "turno": null,
+      "descripcion": "Colegio Trilce, institución de gestión privada en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
+      "notaUbicacion": "",
+      "pension": null,
+      "matricula": null,
+      "cuotaIngreso": null,
+      "anioCostos": null,
+      "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F11ckr4zmnt",
+      "fuentes": [
+        "https://www.trilce.edu.pe/colegio/sede/villa-el-salvador"
+      ]
+    },
+    {
+      "id": "innova-laderas",
+      "nombre": "Innova Schools",
+      "sede": "Laderas de Villa",
+      "gestion": "privado",
+      "niveles": [],
+      "direccion": "Cruce de Prolongación Mateo Pumacahua y Av. Mariano Pastor Sevilla",
+      "imagenUrl": "",
+      "facebookUrl": "",
+      "googleMapsUrl": "",
+      "telefono": "017304555",
+      "turno": null,
+      "descripcion": "Innova Schools, institución de gestión privada en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
+      "notaUbicacion": "",
+      "pension": null,
+      "matricula": null,
+      "cuotaIngreso": null,
+      "anioCostos": null,
+      "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F119tr5fv6",
+      "fuentes": [
+        "https://www.innovaschools.edu.pe/sedes/lima/villa-el-salvador/ves-laderas-de-villa"
+      ]
+    },
+    {
+      "id": "maria-auxiliadora",
+      "nombre": "IEP María Auxiliadora",
+      "sede": "Villa El Salvador",
+      "gestion": "privado",
+      "niveles": [
+        "inicial",
+        "primaria",
+        "secundaria"
+      ],
+      "direccion": "Sector 6, grupo 8A, Av. Mariano Pastor Sevilla",
+      "imagenUrl": "",
+      "facebookUrl": "",
+      "googleMapsUrl": "",
+      "telefono": null,
+      "turno": null,
+      "descripcion": "IEP María Auxiliadora, institución de gestión privada en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
+      "notaUbicacion": "Dirección indicada por el equipo. El padrón reproducido por DataCloud indica Mz. C, lotes 15-16-17, sector 6; confirmar la equivalencia y entrada en Google Maps.",
+      "pension": null,
+      "matricula": null,
+      "cuotaIngreso": null,
+      "anioCostos": null,
+      "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F11dx999jmz",
+      "fuentes": [
+        "https://datacloud.pe/colegio/0763987-maria-auxiliadora"
+      ]
+    },
+    {
+      "id": "ie6066",
+      "nombre": "I.E. 6066 Villa El Salvador",
+      "sede": "Villa El Salvador",
+      "gestion": "publico",
+      "niveles": [
+        "primaria",
+        "secundaria"
+      ],
+      "direccion": "Av. Los Álamos s/n, sector 2",
+      "imagenUrl": "",
+      "facebookUrl": "",
+      "googleMapsUrl": "",
+      "telefono": "995269921",
+      "turno": null,
+      "descripcion": "I.E. 6066 Villa El Salvador, institución de gestión pública en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
+      "notaUbicacion": "",
+      "pension": null,
+      "matricula": null,
+      "cuotaIngreso": null,
+      "anioCostos": null,
+      "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F11b6nmjnq5",
+      "fuentes": [
+        "https://identicole.minedu.gob.pe/colegio/mi_colegio/03284270",
+        "https://identicole.minedu.gob.pe/colegio/05024350"
+      ]
+    },
+    {
+      "id": "ie7091",
+      "nombre": "I.E. 7091 República del Perú",
+      "sede": "Villa El Salvador",
+      "gestion": "publico",
+      "niveles": [
+        "inicial",
+        "primaria",
+        "secundaria"
+      ],
+      "direccion": "Av. José Carlos Mariátegui 25",
+      "imagenUrl": "",
+      "facebookUrl": "",
+      "googleMapsUrl": "",
+      "telefono": "959481737",
+      "turno": null,
+      "descripcion": "I.E. 7091 República del Perú, institución de gestión pública en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
+      "notaUbicacion": "Dirección indicada por el equipo. La ficha de inicial de Identicole indica Mz. E, sector 7; confirmar el acceso y nivel correspondiente en Google Maps.",
+      "pension": null,
+      "matricula": null,
+      "cuotaIngreso": null,
+      "anioCostos": null,
+      "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F12hst_r1x",
+      "fuentes": [
+        "https://www.drelm.gob.pe/interno/redeseducativas/RedesEducativas_ANEXO-2.pdf",
+        "https://identicole.minedu.gob.pe/colegio/14749800"
+      ]
+    },
+    {
+      "id": "ie6048",
+      "nombre": "I.E. 6048 Jorge Basadre",
+      "sede": "Villa El Salvador",
+      "gestion": "publico",
+      "niveles": [
+        "inicial",
+        "primaria",
+        "secundaria"
+      ],
+      "direccion": "Av. Micaela Bastidas s/n, sector 2",
+      "imagenUrl": "",
+      "facebookUrl": "",
+      "googleMapsUrl": "",
+      "telefono": null,
+      "turno": null,
+      "descripcion": "I.E. 6048 Jorge Basadre, institución de gestión pública en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
+      "notaUbicacion": "",
+      "pension": null,
+      "matricula": null,
+      "cuotaIngreso": null,
+      "anioCostos": null,
+      "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F12j4nj4r0",
+      "fuentes": [
+        "https://identicole.minedu.gob.pe/colegio/mi_colegio/06431480"
+      ]
+    },
+    {
+      "id": "ie6063",
+      "nombre": "I.E. 6063 José Carlos Mariátegui",
+      "sede": "Villa El Salvador",
+      "gestion": "publico",
+      "niveles": [
+        "inicial",
+        "primaria",
+        "secundaria"
+      ],
+      "direccion": "Av. El Sol, grupo 6, sector 2",
+      "imagenUrl": "",
+      "facebookUrl": "",
+      "googleMapsUrl": "",
+      "telefono": null,
+      "turno": null,
+      "descripcion": "I.E. 6063 José Carlos Mariátegui, institución de gestión pública en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
+      "notaUbicacion": "",
+      "pension": null,
+      "matricula": null,
+      "cuotaIngreso": null,
+      "anioCostos": null,
+      "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F11c1ny3wrn",
+      "fuentes": [
+        "https://datacloud.pe/colegio/0328393-6063-jose-carlos-mariategui"
+      ]
+    },
+    {
+      "id": "ie6065",
+      "nombre": "I.E. 6065 Perú Inglaterra",
+      "sede": "Villa El Salvador",
+      "gestion": "publico",
+      "niveles": [
+        "primaria",
+        "secundaria"
+      ],
+      "direccion": "Calle Santa Rosa s/n, sector 2",
+      "imagenUrl": "",
+      "facebookUrl": "",
+      "googleMapsUrl": "",
+      "telefono": null,
+      "turno": null,
+      "descripcion": "I.E. 6065 Perú Inglaterra, institución de gestión pública en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
+      "notaUbicacion": "",
+      "pension": null,
+      "matricula": null,
+      "cuotaIngreso": null,
+      "anioCostos": null,
+      "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F1wc490gw",
+      "fuentes": [
+        "https://identicole.minedu.gob.pe/colegio/mi_colegio/04818530",
+        "https://cdn.www.gob.pe/uploads/document/file/6589841/4999005-ver-oficio-multiple-305-2024-minedu-vmgi-drelm-ugel01-dir-agebre-convocatoria-ii-taller-de-fortalecimiento-a-profesores-de-innovacion-pedagogica-en-flipped-classroom-integracion-de-las-herramientas-digitales-en-el-aula-plataformas-de-aprendizaje-en-linea-05-07-2024.pdf?v=1720217173"
+      ]
+    }
   ]
 }

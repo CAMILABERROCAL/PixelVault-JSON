@@ -7,7 +7,6 @@
     const checks = [];
     if (filtro.gestion) checks.push(colegio.gestion === filtro.gestion);
     if (filtro.nivel) checks.push(colegio.niveles.includes(filtro.nivel));
-    if (filtro.zona) checks.push(colegio.zona === filtro.zona);
     if (filtro.min !== null || filtro.max !== null) {
       checks.push(colegio.gestion === 'publico' || (importe(colegio.pension) && (filtro.min === null || colegio.pension >= filtro.min) && (filtro.max === null || colegio.pension <= filtro.max)));
     }
@@ -22,7 +21,6 @@
       if (filtro.orden === 'ranking') return true;
       if (filtro.gestion && c.gestion !== filtro.gestion) return false;
       if (filtro.nivel && !c.niveles.includes(filtro.nivel)) return false;
-      if (filtro.zona && c.zona !== filtro.zona) return false;
       return c.gestion !== 'privado' || !importe(c.pension) || ((filtro.min === null || c.pension >= filtro.min) && (filtro.max === null || c.pension <= filtro.max));
     }).map(c => ({ ...c, coincidencia: criterios(c, filtro) }));
     return list.sort((a,b) => {
@@ -35,7 +33,19 @@
       return (a.nombre + a.sede).localeCompare(b.nombre + b.sede, 'es');
     });
   }
-  const api = { normalizar, importe, seleccionar, criterios };
+  function enlaceSeguro(value) {
+    if (typeof value !== 'string' || !value.trim()) return '';
+    try {
+      const url = new URL(value.trim());
+      return url.protocol === 'https:' && !url.username && !url.password ? url.href : '';
+    } catch { return ''; }
+  }
+  function imagenSegura(value) {
+    if (typeof value !== 'string') return '';
+    const local = /^\.\/img\/[a-zA-Z0-9_./-]+\.(svg|png|webp|jpe?g)$/i.test(value) && !value.includes('..');
+    return local ? value : enlaceSeguro(value);
+  }
+  const api = { normalizar, importe, seleccionar, criterios, enlaceSeguro, imagenSegura };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.ColegiosCore = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
