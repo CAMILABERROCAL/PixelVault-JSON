@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-11-16",
+  "actualizado": "2026-11-18",
   "colegios": [
     {
       "id": "pamer-ves",
@@ -10,22 +10,20 @@
         "primaria",
         "secundaria"
       ],
-      "direccion": "Sector 3, grupo 16",
+      "direccion": "Sector 3, grupo 16, manzana I, lote 2 A",
       "imagenUrl": "",
-      "facebookUrl": "",
+      "facebookUrl": "https://www.facebook.com/PamerVillaElSalvador?locale=es_LA",
       "googleMapsUrl": "",
-      "telefono": null,
+      "telefono": "952380771",
       "turno": null,
       "descripcion": "Colegio Pamer, institución de gestión privada en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
-      "notaUbicacion": "Dirección indicada por el equipo. Pendiente de contrastar el local exacto mediante el enlace de Google Maps.",
-      "pension": null,
-      "matricula": null,
-      "cuotaIngreso": null,
-      "anioCostos": null,
+      "notaUbicacion": "",
       "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F11cms33hr5",
       "fuentes": [
         "https://pamervillaelsalvador.edu.pe/ves/comunicados/RI2025.pdf?_t=1745849773"
-      ]
+      ],
+      "fotoPaginaUrl": "https://www.facebook.com/PamerVillaElSalvador/photos/4856504491071129/",
+      "mapaUrl": "https://www.bing.com/maps/search?v=2&pc=FACEBK&mid=8100&name=St.+3+Gp.+16+Mz.+I+Lte+2+A%2C+Villa+el+Salvador%2C+Peru%2C+Lima+42&mkt=es-MX&FORM=FBKPL1&q=-12.224664962624%2C+-76.932985782623&cp=-12.224665%7E-76.932983&lvl=16&style=r"
     },
     {
       "id": "saco-ves",
@@ -44,10 +42,6 @@
       "turno": null,
       "descripcion": "Colegio Saco Oliveros, institución de gestión privada en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
       "notaUbicacion": "Dirección indicada por el equipo: Av. Revolución 418. El sitio institucional describe Av. Revolución s/n con 1.º de Mayo; confirmar la numeración y entrada en Google Maps.",
-      "pension": null,
-      "matricula": null,
-      "cuotaIngreso": null,
-      "anioCostos": null,
       "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F11fx8h64zj",
       "fuentes": [
         "https://sacooliveros.edu.pe/colegios/sedes/villa-el-salvador"
@@ -71,10 +65,6 @@
       "turno": null,
       "descripcion": "Colegio Trilce, institución de gestión privada en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
       "notaUbicacion": "",
-      "pension": null,
-      "matricula": null,
-      "cuotaIngreso": null,
-      "anioCostos": null,
       "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F11ckr4zmnt",
       "fuentes": [
         "https://www.trilce.edu.pe/colegio/sede/villa-el-salvador"
@@ -94,10 +84,6 @@
       "turno": null,
       "descripcion": "Innova Schools, institución de gestión privada en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
       "notaUbicacion": "",
-      "pension": null,
-      "matricula": null,
-      "cuotaIngreso": null,
-      "anioCostos": null,
       "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F119tr5fv6",
       "fuentes": [
         "https://www.innovaschools.edu.pe/sedes/lima/villa-el-salvador/ves-laderas-de-villa"
@@ -121,10 +107,6 @@
       "turno": null,
       "descripcion": "IEP María Auxiliadora, institución de gestión privada en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
       "notaUbicacion": "Dirección indicada por el equipo. El padrón reproducido por DataCloud indica Mz. C, lotes 15-16-17, sector 6; confirmar la equivalencia y entrada en Google Maps.",
-      "pension": null,
-      "matricula": null,
-      "cuotaIngreso": null,
-      "anioCostos": null,
       "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F11dx999jmz",
       "fuentes": [
         "https://datacloud.pe/colegio/0763987-maria-auxiliadora"
@@ -147,10 +129,6 @@
       "turno": null,
       "descripcion": "I.E. 6066 Villa El Salvador, institución de gestión pública en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
       "notaUbicacion": "",
-      "pension": null,
-      "matricula": null,
-      "cuotaIngreso": null,
-      "anioCostos": null,
       "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F11b6nmjnq5",
       "fuentes": [
         "https://identicole.minedu.gob.pe/colegio/mi_colegio/03284270",
@@ -175,10 +153,6 @@
       "turno": null,
       "descripcion": "I.E. 7091 República del Perú, institución de gestión pública en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
       "notaUbicacion": "Dirección indicada por el equipo. La ficha de inicial de Identicole indica Mz. E, sector 7; confirmar el acceso y nivel correspondiente en Google Maps.",
-      "pension": null,
-      "matricula": null,
-      "cuotaIngreso": null,
-      "anioCostos": null,
       "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F12hst_r1x",
       "fuentes": [
         "https://www.drelm.gob.pe/interno/redeseducativas/RedesEducativas_ANEXO-2.pdf",
@@ -203,10 +177,6 @@
       "turno": null,
       "descripcion": "I.E. 6048 Jorge Basadre, institución de gestión pública en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
       "notaUbicacion": "",
-      "pension": null,
-      "matricula": null,
-      "cuotaIngreso": null,
-      "anioCostos": null,
       "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F12j4nj4r0",
       "fuentes": [
         "https://identicole.minedu.gob.pe/colegio/mi_colegio/06431480"
@@ -230,10 +200,6 @@
       "turno": null,
       "descripcion": "I.E. 6063 José Carlos Mariátegui, institución de gestión pública en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
       "notaUbicacion": "",
-      "pension": null,
-      "matricula": null,
-      "cuotaIngreso": null,
-      "anioCostos": null,
       "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F11c1ny3wrn",
       "fuentes": [
         "https://datacloud.pe/colegio/0328393-6063-jose-carlos-mariategui"
@@ -256,10 +222,6 @@
       "turno": null,
       "descripcion": "I.E. 6065 Perú Inglaterra, institución de gestión pública en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
       "notaUbicacion": "",
-      "pension": null,
-      "matricula": null,
-      "cuotaIngreso": null,
-      "anioCostos": null,
       "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F1wc490gw",
       "fuentes": [
         "https://identicole.minedu.gob.pe/colegio/mi_colegio/04818530",

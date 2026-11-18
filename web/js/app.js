@@ -3,7 +3,6 @@ const $ = selector => document.querySelector(selector);
 const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const etiquetas = {inicial:'Inicial',primaria:'Primaria',secundaria:'Secundaria'};
 let catalogo = [], actualizado = '';
-const money = value => ColegiosCore.importe(value) ? new Intl.NumberFormat('es-PE',{style:'currency',currency:'PEN',maximumFractionDigits:2}).format(value) : 'Consultar';
 const safeURL = ColegiosCore.enlaceSeguro;
 function imagenColegio(c) {
   const ruta = ColegiosCore.imagenSegura(c.imagenUrl);
@@ -20,29 +19,27 @@ function botonEnlace(url, texto) {
   const href = safeURL(url);
   return href ? `<a class="secondary" href="${escapeHTML(href)}" target="_blank" rel="noopener noreferrer">${texto} ↗</a>` : `<span class="link-pending" aria-disabled="true">${texto} · pendiente</span>`;
 }
-function filtros() {return {texto:$('#search').value,gestion:$('#gestion').value,nivel:$('#nivel').value,min:$('#min').value === '' ? null : Number($('#min').value),max:$('#max').value === '' ? null : Number($('#max').value),incluirDesconocidos:$('#unknown').checked,orden:$('#sort').value};}
+function filtros() {return {texto:$('#search').value,gestion:$('#gestion').value,nivel:$('#nivel').value,orden:$('#sort').value};}
 function render() {
   const f = filtros();
-  $('#filterError').textContent = '';
   $('#rankingNote').hidden = f.orden !== 'ranking';
   document.querySelectorAll('[data-quick]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.quick === 'todos' ? !f.gestion && !f.nivel : f.gestion === b.dataset.quick && !f.nivel)));
-  let lista;
-  try {lista = ColegiosCore.seleccionar(catalogo,f);} catch(error) {$('#filterError').textContent=error.message;$('#cards').innerHTML='';$('#count').textContent='Revisa el rango de precios.';return;}
+  const lista = ColegiosCore.seleccionar(catalogo,f);
   $('#count').textContent = `${lista.length} ${lista.length===1?'opción disponible':'opciones disponibles'} en nuestro catálogo inicial`;
-  $('#cards').innerHTML = lista.length ? lista.map(c=>`<article class="card"><div class="card-top"><span class="badge">${c.gestion==='publico'?'PÚBLICO':'PRIVADO'}</span>${imagenColegio(c)}</div><div class="card-content">${f.orden==='ranking'?`<p class="match">${c.coincidencia.total?`${c.coincidencia.aciertos} de ${c.coincidencia.total} criterios coinciden`:'Selecciona tus preferencias'}</p>`:''}<h3>${escapeHTML(c.nombre)}</h3><p class="sede">${escapeHTML(c.sede)}</p><p class="address">⌖ ${escapeHTML(c.direccion)}</p><div class="tags">${c.niveles.length?c.niveles.map(n=>`<span class="tag">${escapeHTML(etiquetas[n])}</span>`).join(''):'<span class="tag">Niveles por confirmar</span>'}</div><div class="cost-row"><span>${c.gestion==='publico'?'Gestión pública':'Pensión mensual'}</span><strong>${c.gestion==='publico'?'Sin pensión':money(c.pension)}</strong></div><button class="detail-button" data-detail="${escapeHTML(c.id)}">Ver información <span aria-hidden="true">↗</span></button></div></article>`).join('') : '<div class="empty"><h3>No encontramos coincidencias</h3><p>Prueba otro nombre, amplía el presupuesto o limpia los filtros.</p><button class="primary" id="emptyClear">Limpiar filtros</button></div>';
+  $('#cards').innerHTML = lista.length ? lista.map(c=>`<article class="card"><div class="card-top"><span class="badge">${c.gestion==='publico'?'PÚBLICO':'PRIVADO'}</span>${imagenColegio(c)}</div><div class="card-content">${f.orden==='ranking'?`<p class="match">${c.coincidencia.total?`${c.coincidencia.aciertos} de ${c.coincidencia.total} criterios coinciden`:'Selecciona tus preferencias'}</p>`:''}<h3>${escapeHTML(c.nombre)}</h3><p class="sede">${escapeHTML(c.sede)}</p><p class="address">⌖ ${escapeHTML(c.direccion)}</p><div class="tags">${c.niveles.length?c.niveles.map(n=>`<span class="tag">${escapeHTML(etiquetas[n])}</span>`).join(''):'<span class="tag">Niveles por confirmar</span>'}</div><button class="detail-button" data-detail="${escapeHTML(c.id)}">Ver información <span aria-hidden="true">↗</span></button></div></article>`).join('') : '<div class="empty"><h3>No encontramos coincidencias</h3><p>Prueba otro nombre o limpia los filtros.</p><button class="primary" id="emptyClear">Limpiar filtros</button></div>';
   if ($('#emptyClear')) $('#emptyClear').onclick=limpiar;
   prepararImagenes($('#cards'));
 }
-function limpiar(){['search','gestion','nivel','min','max'].forEach(id=>$('#'+id).value='');$('#unknown').checked=true;$('#sort').value='nombre';render();}
+function limpiar(){['search','gestion','nivel'].forEach(id=>$('#'+id).value='');$('#sort').value='nombre';render();}
 function detalle(id) {
  const c=catalogo.find(c=>c.id===id);if(!c)return;
- const bloques=[['Gestión',c.gestion==='publico'?'Pública':'Privada'],['Niveles documentados',c.niveles.map(n=>etiquetas[n]).join(', ')||'Por confirmar'],['Dirección',c.direccion],['Turno',c.turno||'Consultar con el colegio'],['Pensión mensual',c.gestion==='publico'?'Sin pensión escolar':money(c.pension)],['Matrícula',c.gestion==='publico'?'Consultar proceso de matrícula':money(c.matricula)],['Cuota de ingreso',c.gestion==='publico'?'No aplica a esta ficha':money(c.cuotaIngreso)],['Año de costos',c.anioCostos||'Sin tarifario verificado']];
- $('#detailContent').innerHTML=`<div class="detail-heading">${imagenColegio(c)}<div><p class="eyebrow">VILLA EL SALVADOR</p><h2 id="detailTitle">${escapeHTML(c.nombre)}</h2><p>${escapeHTML(c.sede)}</p></div></div><p>${escapeHTML(c.descripcion)}</p>${c.notaUbicacion ? `<p class="location-note">${escapeHTML(c.notaUbicacion)}</p>` : ''}<div class="detail-grid">${bloques.map(([k,v])=>`<div><strong>${escapeHTML(k)}</strong>${escapeHTML(v)}</div>`).join('')}</div><div class="detail-actions">${botonEnlace(c.googleMapsUrl, 'Google Maps')}${botonEnlace(c.facebookUrl, 'Facebook')}${c.telefono&&/^\d+$/.test(c.telefono)?`<a class="secondary" href="tel:${c.telefono}">Llamar: ${escapeHTML(c.telefono)}</a>`:''}</div><h3>Fuentes de esta ficha</h3><ul class="sources">${c.fuentes.map((u,i)=>{const url=safeURL(u);return url?`<li><a href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(new URL(url).hostname)} · fuente ${i+1} ↗</a></li>`:'';}).join('')}</ul><p class="source-note">Actualización del catálogo: ${escapeHTML(actualizado)}. Confirma importes, servicios y vacantes directamente con la institución. No se han asignado estrellas ni puntuaciones de calidad.</p>`;
+ const bloques=[['Gestión',c.gestion==='publico'?'Pública':'Privada'],['Niveles documentados',c.niveles.map(n=>etiquetas[n]).join(', ')||'Por confirmar'],['Dirección',c.direccion],['Turno',c.turno||'Consultar con el colegio']];
+ $('#detailContent').innerHTML=`<div class="detail-heading">${imagenColegio(c)}<div><p class="eyebrow">VILLA EL SALVADOR</p><h2 id="detailTitle">${escapeHTML(c.nombre)}</h2><p>${escapeHTML(c.sede)}</p></div></div><p>${escapeHTML(c.descripcion)}</p>${c.notaUbicacion ? `<p class="location-note">${escapeHTML(c.notaUbicacion)}</p>` : ''}<div class="detail-grid">${bloques.map(([k,v])=>`<div><strong>${escapeHTML(k)}</strong>${escapeHTML(v)}</div>`).join('')}</div><div class="detail-actions">${botonEnlace(c.mapaUrl || c.googleMapsUrl, 'Ver ubicación en el mapa')}${botonEnlace(c.facebookUrl, 'Facebook')}${c.fotoPaginaUrl ? botonEnlace(c.fotoPaginaUrl, 'Ver foto en Facebook') : ''}${c.telefono&&/^\d+$/.test(c.telefono)?`<a class="secondary" href="tel:${c.telefono}">Llamar: ${escapeHTML(c.telefono)}</a>`:''}</div><h3>Fuentes de esta ficha</h3><ul class="sources">${c.fuentes.map((u,i)=>{const url=safeURL(u);return url?`<li><a href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(new URL(url).hostname)} · fuente ${i+1} ↗</a></li>`:'';}).join('')}</ul><p class="source-note">Actualización del catálogo: ${escapeHTML(actualizado)}. Para conocer los costos y la disponibilidad de vacantes, comunícate directamente con el colegio. No se han asignado estrellas ni puntuaciones de calidad.</p>`;
  prepararImagenes($('#detailContent'));
  $('#detail').showModal();
 }
 $('#cards').addEventListener('click',e=>{const b=e.target.closest('[data-detail]');if(b)detalle(b.dataset.detail);});
-for(const id of ['search','gestion','nivel','min','max','unknown','sort']) $('#'+id).addEventListener(id==='search'||id==='min'||id==='max'?'input':'change',render);
+for(const id of ['search','gestion','nivel','sort']) $('#'+id).addEventListener(id==='search'?'input':'change',render);
 $('#clear').onclick=limpiar;
 $('#searchButton').onclick=()=>{render();$('#directorio').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});};
 document.querySelectorAll('[data-quick]').forEach(b=>b.onclick=()=>{const v=b.dataset.quick;$('#gestion').value=['publico','privado'].includes(v)?v:'';$('#nivel').value='';render();});
