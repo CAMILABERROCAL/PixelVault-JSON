@@ -1,0 +1,38 @@
+name: Jhair - Sintaxis JavaScript colegios
+
+on:
+  push:
+    branches:
+      - feature/jhair-actions-colegios
+    paths:
+      - 'web/js/**'
+      - '.github/workflows/jhair-sintaxis-js.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'web/js/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sintaxis:
+    name: Comprobar sintaxis de app.js y colegios-core.js
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Comprobar sintaxis
+        run: |
+          node --check web/js/app.js
+          node --check web/js/colegios-core.js

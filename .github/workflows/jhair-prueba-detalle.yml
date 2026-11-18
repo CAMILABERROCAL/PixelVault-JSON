@@ -1,0 +1,40 @@
+name: Jhair - Prueba de ficha de detalle
+
+on:
+  push:
+    branches:
+      - feature/jhair-actions-colegios
+    paths:
+      - 'web/js/app.js'
+      - 'web/datos/**'
+      - 'pruebas/detalle-colegios.test.cjs'
+      - '.github/workflows/jhair-prueba-detalle.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'web/js/app.js'
+      - 'web/datos/**'
+      - 'pruebas/detalle-colegios.test.cjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  detalle:
+    name: Campos, importes por consultar, enlaces y fuentes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Ejecutar pruebas de detalle
+        run: node --test pruebas/detalle-colegios.test.cjs

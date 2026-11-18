@@ -1,0 +1,40 @@
+name: Jhair - Prueba de filtros
+
+on:
+  push:
+    branches:
+      - feature/jhair-actions-colegios
+    paths:
+      - 'web/js/colegios-core.js'
+      - 'web/datos/**'
+      - 'pruebas/filtros-colegios.test.cjs'
+      - '.github/workflows/jhair-prueba-filtros.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'web/js/colegios-core.js'
+      - 'web/datos/**'
+      - 'pruebas/filtros-colegios.test.cjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  filtros:
+    name: Gestión, nivel, presupuesto, orden y búsqueda
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Ejecutar pruebas de filtros
+        run: node --test pruebas/filtros-colegios.test.cjs
