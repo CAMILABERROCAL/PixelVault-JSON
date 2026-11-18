@@ -11,9 +11,9 @@
         "secundaria"
       ],
       "direccion": "Sector 3, grupo 16, manzana I, lote 2 A",
-      "imagenUrl": "",
+      "imagenUrl": "./img/pamer-ves.png",
       "facebookUrl": "https://www.facebook.com/PamerVillaElSalvador?locale=es_LA",
-      "googleMapsUrl": "",
+      "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=-12.224664962624%2C-76.932985782623",
       "telefono": "952380771",
       "turno": null,
       "descripcion": "Colegio Pamer, institución de gestión privada en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
@@ -21,9 +21,7 @@
       "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F11cms33hr5",
       "fuentes": [
         "https://pamervillaelsalvador.edu.pe/ves/comunicados/RI2025.pdf?_t=1745849773"
-      ],
-      "fotoPaginaUrl": "https://www.facebook.com/PamerVillaElSalvador/photos/4856504491071129/",
-      "mapaUrl": "https://www.bing.com/maps/search?v=2&pc=FACEBK&mid=8100&name=St.+3+Gp.+16+Mz.+I+Lte+2+A%2C+Villa+el+Salvador%2C+Peru%2C+Lima+42&mkt=es-MX&FORM=FBKPL1&q=-12.224664962624%2C+-76.932985782623&cp=-12.224665%7E-76.932983&lvl=16&style=r"
+      ]
     },
     {
       "id": "saco-ves",

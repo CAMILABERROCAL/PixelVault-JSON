@@ -37,7 +37,7 @@ Busca el nombre del colegio en `web/datos/colegios.json`. Completa los campos va
 - `imagenUrl`: pegar una URL HTTPS directa que sirva una imagen (no un enlace de búsqueda de Google ni una página de Facebook). También admite una imagen guardada en `web/img/`, por ejemplo `./img/pamer.png`. Las imágenes externas pueden caducar o bloquear su carga; guardar el archivo local suele ser más estable.
 - `facebookUrl`: URL HTTPS de la página oficial del colegio.
 - `googleMapsUrl`: enlace HTTPS de la ubicación exacta copiado desde Compartir en Google Maps. Se admiten enlaces cortos `https://maps.app.goo.gl/...`.
-- `mapaUrl`: enlace de ubicación alternativo, por ejemplo Bing Maps. `fotoPaginaUrl`: página de la foto cuando no se dispone de un archivo de imagen directo.
+- En Pamer el logo se sirve desde `web/img/pamer-ves.png`. La dirección abre Google Maps con las coordenadas facilitadas y el teléfono se muestra en su propio recuadro.
 - Si la imagen falta o falla, se conserva un cuadrado vacío. No aparecen iniciales ni un escudo inventado.
 - Si falta un enlace, se muestra como pendiente y no es clicable. No se genera una búsqueda de Maps que pueda apuntar a otro colegio.
 - Una misma imagen aparece en la tarjeta y en la ventana de detalle.
