@@ -55,18 +55,19 @@
         "primaria",
         "secundaria"
       ],
-      "direccion": "Av. Separadora Agroindustrial, subparcela 34 A-2",
-      "imagenUrl": "",
-      "facebookUrl": "",
-      "googleMapsUrl": "",
+      "direccion": "Cruce de la Av. César Vallejo y la ruta E",
+      "imagenUrl": "./img/trilce-ves.png",
+      "facebookUrl": "https://www.facebook.com/trilcevillaelsalvador.pe?locale=es_LA",
+      "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=-12.220912219055%2C-76.952589294437",
       "telefono": null,
       "turno": null,
       "descripcion": "Colegio Trilce, institución de gestión privada en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
-      "notaUbicacion": "",
+      "notaUbicacion": "Referencia del mapa: cruce de la Av. César Vallejo y la ruta E. La dirección institucional registrada es Av. Separadora Agroindustrial, subparcela 34 A-2.",
       "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F11ckr4zmnt",
       "fuentes": [
         "https://www.trilce.edu.pe/colegio/sede/villa-el-salvador"
-      ]
+      ],
+      "sitioWebUrl": "https://www.trilce.edu.pe/"
     },
     {
       "id": "innova-laderas",
