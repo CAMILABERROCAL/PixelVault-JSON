@@ -1,0 +1,8 @@
+# Imagen ligera de Nginx para servir el ranking de colegios
+FROM nginx:1.27-alpine
+
+# Copiar la página web al servidor Nginx
+COPY web/ /usr/share/nginx/html/
+
+# Puerto del servidor web
+EXPOSE 80
