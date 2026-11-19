@@ -1,27 +1,5 @@
-# Descripción del proyecto PixelVault-JSON
+# Directorio de colegios de Villa El Salvador
 
-## ¿Qué es PixelVault-JSON?
+El directorio reúne cinco colegios públicos y cinco privados. Cada ficha muestra los niveles educativos, la dirección, la ubicación en Maps y las fuentes. Las familias pueden buscar por texto y ordenar por coincidencia con sus filtros. El catálogo se distribuye dentro de la misma web y cada actualización se versiona en Git.
 
-PixelVault-JSON es un proyecto web orientado a la gestión de una tienda de videojuegos.
-
-El sistema utiliza Java y Spring Boot para desarrollar su lógica de funcionamiento, mientras que JSON permite almacenar información estructurada.
-
-## Objetivo del proyecto
-
-Desarrollar una aplicación que permita organizar y consultar información relacionada con videojuegos.
-
-## Tecnologías utilizadas
-
-- Java
-- Spring Boot
-- JSON
-- Git
-- GitHub
-
-## Trabajo colaborativo
-
-El proyecto utiliza GitHub para gestionar el desarrollo colaborativo.
-
-Cada integrante trabaja en una rama independiente para evitar modificaciones directas en la rama principal.
-
-Los cambios se registran mediante commits y posteriormente pueden integrarse a la rama de desarrollo.
+La [guía de entrega](../README.md) documenta Git, las verificaciones automáticas, la imagen de Nginx, el despliegue en Docker Desktop con Kubernetes y el sitio público en Render.

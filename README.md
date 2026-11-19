@@ -1,138 +1,56 @@
 # Colegio Cerca · Villa El Salvador
 
-Directorio de colegios públicos y privados de Villa El Salvador. Permite consultar su ubicación y filtrar por gestión y nivel educativo.
+Borrador de documentación de la entrega final de Herramientas de Desarrollo.
 
-**[Abrir el directorio en Render](https://colegio-cerca-ves.onrender.com/)**
+Colegio Cerca permite encontrar diez colegios de Villa El Salvador, consultar niveles educativos, dirección y fuentes, y comparar coincidencias según los filtros elegidos. La aplicación completa está en `web/`. El navegador carga el catálogo desde `web/datos/colegios.json`. Nginx sirve las páginas, los scripts, los datos y las fotos desde la misma imagen.
 
-## Antecedentes del repositorio
+## Sitio público en Render
 
-<div align="center">
+[Abrir Colegio Cerca](https://colegio-cerca-ves.onrender.com/). Busca un colegio, filtra por gestión y abre su ficha. Para reproducir la publicación como sitio estático, conecta el repositorio en Render, selecciona una rama que contenga el sitio y configura `web` como directorio de publicación desde la raíz. El contenido está listo para servir sin compilación. La dirección pública permite mostrar el sitio desde otro dispositivo.
 
-# 🎮 PIXELVAULT
+## Git y GitHub
 
-### Tu próxima aventura empieza aquí
+La rama de presentación es `entrega/colegio-cerca`. Se preparó sobre `feature/camila-colegios-ves`, con los aportes Docker de los PR 30 a 32 y las pruebas de `feature/jhair-actions-colegios`. En GitHub, abre los commits y el historial de los pull requests para mostrar cómo se revisaron e integraron los cambios. El manifiesto de esta entrega es `k8s/colegio-cerca.yaml`.
 
-Una tienda web de videojuegos digitales para explorar, elegir y preparar tu próxima compra.
+## GitHub Actions
 
-<br>
-
-![Java](https://img.shields.io/badge/Java_17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![JSON](https://img.shields.io/badge/JSON-292929?style=for-the-badge&logo=json&logoColor=white)
-
-<br>
-
-**🎮 Explora  ·  🛒 Elige  ·  🔐 Ingresa  ·  📦 Consulta tus pedidos**
-
-</div>
-
----
-
-## 🌟 Conoce PixelVault
-
-**PixelVault** es un proyecto académico que representa una tienda de videojuegos digitales. Permite consultar el catálogo, agregar productos al carrito y completar una compra de demostración.
-
-También cuenta con un espacio de administración para gestionar los videojuegos, actualizar las existencias y consultar los pedidos realizados.
-
-Nuestro objetivo es aplicar el desarrollo web y el trabajo en equipo mediante una aplicación que conecta una interfaz interactiva con un servidor y almacenamiento en archivos JSON.
-
-<br>
-
-## 🕹️ ¿Qué ofrece nuestra página?
-
-| | Funcionalidad | ¿Qué permite hacer? |
-| :---: | --- | --- |
-| 🎮 | **Catálogo de videojuegos** | Explorar títulos y consultar su descripción, plataforma, género y precio. |
-| 🔎 | **Búsqueda y filtros** | Encontrar videojuegos y ordenar los resultados por precio. |
-| 🛒 | **Carrito de compras** | Agregar productos, modificar cantidades y revisar el total. |
-| 👤 | **Registro e inicio de sesión** | Crear una cuenta y acceder para continuar al pago. |
-| 💳 | **Compra de demostración** | Probar un pago aprobado o rechazado mediante tarjeta o Yape de prueba. |
-| 📦 | **Historial de pedidos** | Consultar las compras asociadas a la cuenta del cliente. |
-| 🛠️ | **Panel de administración** | Gestionar videojuegos, precios, disponibilidad y pedidos con acceso protegido. |
-
-> 💡 Puedes explorar el catálogo y preparar tu carrito sin iniciar sesión. Para continuar al pago necesitas ingresar a tu cuenta. Las operaciones de pago son simuladas y no generan cobros reales.
-
-<br>
-
-## 💻 Tecnologías utilizadas
-
-### ⚙️ Servidor y seguridad
-
-| Tecnología | ¿Para qué la usamos? |
-| --- | --- |
-| ☕ **Java 17** | Desarrollar la lógica de la aplicación y las reglas de compra. |
-| 🍃 **Spring Boot 3.3.4** | Ejecutar el servidor y conectar la interfaz con la API REST. |
-| 🔐 **Spring Security** | Controlar el inicio de sesión y los permisos del cliente y administrador. |
-| 🛡️ **BCrypt** | Proteger las contraseñas mediante hashes. |
-| 📦 **Maven** | Gestionar las dependencias, ejecutar pruebas y compilar el proyecto. |
-
-### 🎨 Interfaz y almacenamiento
-
-| Tecnología | ¿Para qué la usamos? |
-| --- | --- |
-| 🧱 **HTML** | Organizar el contenido de las páginas. |
-| 🎨 **CSS** | Dar estilo a la tienda y adaptar las pantallas a distintos tamaños. |
-| ⚡ **JavaScript** | Gestionar las interacciones, el carrito y las solicitudes al servidor. |
-| 🗂️ **JSON** | Conservar videojuegos, cuentas y pedidos en archivos del servidor. |
-| 🛒 **localStorage** | Mantener el carrito guardado en el navegador. |
-
-### 🤝 Herramientas de colaboración
-
-![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
-![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
-![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-
-Utilizamos Git y GitHub para organizar los cambios de cada integrante, revisar aportes e integrar las mejoras. GitHub Actions permite automatizar verificaciones y Docker facilita preparar la ejecución en contenedores.
-
-<br>
-
-## 👥 Nuestro equipo
-
-Las siguientes responsabilidades corresponden a las mejoras asignadas sobre la versión inicial. Su avance se registra en los Issues y pull requests del repositorio.
-
-| Integrante | Área asignada | Responsabilidades | Rama |
-| --- | --- | --- | --- |
-| 🛒 **Camila** | Carrito de compras | Agregar la opción de vaciar el carrito con confirmación y mensajes. Comprobar que cancelar conserve los productos y confirmar los elimine. | `feature/Camila` |
-| 🎮 **Diego** | Catálogo | Agregar un botón para restablecer los filtros, mejorar el mensaje sin coincidencias y ajustar la presentación en móvil. | `feature/diego` |
-| 🧾 **Jhair** | Pedidos y pago | Agregar la descarga de un comprobante de demostración en TXT y mejorar la explicación de los métodos de pago y el regreso al carrito. | `feature/jhair` |
-| 🔐 **Stiven** | Login y registro | Agregar controles accesibles para mostrar u ocultar contraseñas e incorporar una guía de longitud al registrarse. | `feature/stiven` |
-| ⚙️ **Alexander** | Ejecución y automatización | Mejorar la comprobación de salud en Docker y Compose, agregar la verificación de sintaxis JavaScript y actualizar las instrucciones de ejecución. | `feature/alexander` |
-
-<br>
-
-## 💾 ¿Cómo conservamos la información?
-
-**PixelVault utiliza archivos JSON como almacenamiento del servidor.**
-
-- 🎮 **Videojuegos:** información del catálogo, precios y existencias.
-- 👤 **Cuentas:** datos de los usuarios y contraseñas protegidas mediante hashes.
-- 📦 **Pedidos:** detalle de las compras de demostración realizadas.
-- 🛒 **Carrito:** se conserva por separado en el navegador del usuario.
-
-Los datos del servidor se generan en `datos/tienda.json` y permanecen disponibles después de reiniciar la aplicación. Esta carpeta está excluida del repositorio mediante `.gitignore`.
-
-<br>
-
-## 🚀 Ejecutar la aplicación
-
-Necesitas **JDK 17 y Maven 3.9 o superior**.
-
-Desde la carpeta que contiene `pom.xml`, ejecuta las pruebas:
+Los seis workflows con prefijo Jhair verifican sintaxis JavaScript, estructura HTML, catálogo, filtros, fichas y respuesta HTTP. En la pestaña Actions elige la ejecución de la rama de entrega y abre los pasos del trabajo para mostrar el resultado. Con Node.js también se puede repetir la suite desde la raíz.
 
 ```powershell
-mvn clean verify
+node --test pruebas/colegios.test.cjs pruebas/detalle-colegios.test.cjs pruebas/estructura-html-colegios.test.cjs pruebas/filtros-colegios.test.cjs
 ```
 
-Después inicia la aplicación:
+## Docker
+
+`Dockerfile.web` copia el sitio a Nginx. Para una demostración independiente de Kubernetes, abre Docker Desktop en modo de contenedores Linux y ejecuta desde la carpeta del proyecto:
 
 ```powershell
-mvn spring-boot:run
+docker build -f Dockerfile.web -t colegio-cerca:ves-v1 .
+docker run --rm -p 8082:80 colegio-cerca:ves-v1
 ```
 
-Abre en tu navegador: **http://localhost:8081**
+Abre http://localhost:8082. Ctrl+C detiene esta demostración. [Capturas del equipo](docs/ejecucion-docker-colegios.md).
 
-Para detener la aplicación, presiona **Ctrl + C** en la terminal.
+## Kubernetes en Docker Desktop
+
+Activa Kubernetes en Docker Desktop y espera a que el clúster esté en ejecución. En Windows, haz doble clic en **PRESENTAR.cmd**. El archivo comprueba Docker y el contexto docker-desktop, construye la imagen, aplica el Deployment y el Service en el namespace default, espera al Pod y muestra el estado. El Service dirige tráfico al puerto 80 del contenedor seleccionado por la etiqueta app=colegio-cerca.
+
+Con la ventana abierta, entra a http://localhost:8083. El reenvío de puertos usa el Service. Abre una ficha y cambia un filtro para probar la aplicación desde el clúster. En una segunda ventana de PowerShell comprueba:
+
+```powershell
+kubectl --context docker-desktop -n default get pods -l app=colegio-cerca
+kubectl --context docker-desktop -n default get service colegio-cerca
+(Invoke-RestMethod http://localhost:8083/datos/colegios.json).colegios.Count
+```
+
+Para la exposición guarda una captura del Pod con READY 1/1 y STATUS Running, otra del Service y otra del directorio con localhost:8083 visible. El último comando debe devolver 10. Mantén abierta la ventana de PRESENTAR.cmd durante la demostración.
+
+### Diagnóstico
+
+Si el contexto docker-desktop no existe, comprueba que Kubernetes esté habilitado en Docker Desktop. Si el Pod indica ImagePullBackOff, comprueba que Docker usa el motor local de Docker Desktop y que el clúster puede acceder a la imagen construida. En clústeres con almacén aislado, importa la imagen en los nodos o usa una imagen publicada en un registro accesible y actualiza el campo image. Si el puerto 8083 está ocupado, usa otro puerto libre, por ejemplo:
+
+```powershell
+kubectl --context docker-desktop -n default port-forward service/colegio-cerca 8084:80
+```
+
+Abre http://localhost:8084 en ese caso.

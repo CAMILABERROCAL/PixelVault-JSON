@@ -70,23 +70,10 @@ http://localhost:8082
 
 Se comprobó que la página mostraba las tarjetas de colegios y las opciones de búsqueda y filtrado.
 
-## 5. Relación con Kubernetes
+## Evidencias de la ejecución del equipo
 
-La configuración realizada con Docker sirve como base para el despliegue posterior en Kubernetes.
+![Directorio servido por Docker](evidencias-docker/01-pagina-principal.png.png)
 
-El integrante encargado de Kubernetes podrá utilizar una imagen del frontend para configurar un Deployment y un Service.
+![Terminal de Docker](evidencias-docker/02-docker-funcionando.png.png)
 
-## 6. Evidencias
-
-En esta sección se agregarán las capturas de:
-
-- Construcción exitosa de la imagen Docker.
-- Ejecución de los contenedores mediante `docker compose ps`.
-- Ranking de colegios funcionando en el navegador.
-- Pull Request de Docker integrado en GitHub.
-
-## 7. Conclusión
-
-Con Docker se logró ejecutar el frontend del ranking de colegios de manera independiente, utilizando Nginx como servidor web.
-
-Esta configuración facilita las pruebas del proyecto y permite preparar su posterior despliegue mediante Kubernetes.
+Para desplegar esta misma web en Kubernetes, sigue el [borrador de entrega](../README.md).

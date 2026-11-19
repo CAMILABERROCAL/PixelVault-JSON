@@ -89,12 +89,12 @@ Los puertos y servicios disponibles dependen de la configuración definida en `c
 
 Se comprobó que la página ColegioCerca carga correctamente desde Docker mediante http://localhost:8082.
 
-![Página principal del ranking](evidencias-docker/01-pagina-principal.png)
+![Página principal del ranking](evidencias-docker/01-pagina-principal.png.png)
 
 
 ### Evidencia 2. Construcción y ejecución con Docker
 
 Se ejecutaron los comandos de construcción e inicio del servicio. La terminal confirmó que la imagen fue construida y que el contenedor ranking-colegios se encuentra en ejecución.
 
-![Docker funcionando](evidencias-docker/02-docker-funcionando.png)
+![Docker funcionando](evidencias-docker/02-docker-funcionando.png.png)
   

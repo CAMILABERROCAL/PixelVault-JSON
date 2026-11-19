@@ -1,0 +1,55 @@
+name: Jhair - Validar catálogo de colegios
+
+on:
+  push:
+    branches:
+      - feature/jhair-actions-colegios
+      - entrega/colegio-cerca
+    paths:
+      - 'web/datos/**'
+      - '.github/workflows/jhair-validar-catalogo.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'web/datos/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  catalogo:
+    name: JSON válido, IDs únicos y 5 públicos y 5 privados
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Validar el catálogo
+        run: |
+          node -e "
+            const fs = require('fs');
+            const data = JSON.parse(fs.readFileSync('web/datos/colegios.json', 'utf8'));
+            const colegios = data.colegios;
+            if (!Array.isArray(colegios)) throw new Error('colegios debe ser una lista');
+            const ids = colegios.map(c => c.id);
+            if (new Set(ids).size !== ids.length) throw new Error('Hay IDs repetidos');
+            const privados = colegios.filter(c => c.gestion === 'privado').length;
+            const publicos = colegios.filter(c => c.gestion === 'publico').length;
+            if (privados !== 5 || publicos !== 5) throw new Error('Se esperaban 5 privados y 5 públicos, hay ' + privados + ' y ' + publicos);
+            for (const c of colegios) {
+              if (!c.nombre || !c.direccion) throw new Error('Falta nombre o dirección en ' + c.id);
+              for (const u of c.fuentes) {
+                if (new URL(u).protocol !== 'https:') throw new Error('Fuente no HTTPS en ' + c.id);
+              }
+            }
+            console.log('Catálogo válido: ' + colegios.length + ' colegios');
+          "

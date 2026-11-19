@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: colegio-cerca
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: colegio-cerca
+  template:
+    metadata:
+      labels:
+        app: colegio-cerca
+    spec:
+      containers:
+        - name: web
+          image: colegio-cerca:ves-v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /datos/colegios.json
+              port: http
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: colegio-cerca
+spec:
+  selector:
+    app: colegio-cerca
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

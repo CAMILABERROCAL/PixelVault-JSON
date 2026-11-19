@@ -1,0 +1,41 @@
+name: Jhair - Prueba de estructura HTML
+
+on:
+  push:
+    branches:
+      - feature/jhair-actions-colegios
+      - entrega/colegio-cerca
+    paths:
+      - 'web/index.html'
+      - 'web/js/app.js'
+      - 'pruebas/estructura-html-colegios.test.cjs'
+      - '.github/workflows/jhair-prueba-estructura-html.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'web/index.html'
+      - 'web/js/app.js'
+      - 'pruebas/estructura-html-colegios.test.cjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  estructura:
+    name: IDs de app.js presentes en index.html
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Ejecutar pruebas de estructura
+        run: node --test pruebas/estructura-html-colegios.test.cjs

@@ -1,0 +1,54 @@
+name: Jhair - Smoke test del sitio
+
+on:
+  push:
+    branches:
+      - feature/jhair-actions-colegios
+      - entrega/colegio-cerca
+    paths:
+      - 'web/**'
+      - '.github/workflows/jhair-smoke-sitio.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'web/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: Levantar el sitio y comprobar que responde
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Iniciar servidor estático
+        run: |
+          python3 -m http.server 8080 --directory web > servidor.log 2>&1 &
+          echo $! > servidor.pid
+
+      - name: Comprobar que la página y el catálogo responden
+        run: |
+          for i in {1..15}; do
+            if curl --fail --silent --show-error http://localhost:8080/ | grep -q "Colegio" \
+              && curl --fail --silent --show-error http://localhost:8080/datos/colegios.json | grep -q '"colegios"'; then
+              echo "Sitio y catálogo responden correctamente"
+              exit 0
+            fi
+            echo "Esperando al servidor... intento $i"
+            sleep 2
+          done
+          echo "ERROR: el sitio no respondió"
+          cat servidor.log
+          exit 1
+
+      - name: Detener servidor
+        if: always()
+        run: |
+          if [ -f servidor.pid ]; then kill "$(cat servidor.pid)" || true; fi
