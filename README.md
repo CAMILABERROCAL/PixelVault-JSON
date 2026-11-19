@@ -156,6 +156,11 @@ Necesitas **JDK 17 y Maven 3.9 o superior**. Desde la carpeta que contiene `pom.
 
 ```powershell
 mvn clean verify
+```
+
+Después inicia la aplicación:
+
+```powershell
 mvn spring-boot:run
 ```
 

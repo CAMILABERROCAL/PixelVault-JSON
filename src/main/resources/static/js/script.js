@@ -1,149 +1,929 @@
 'use strict';
+
 const $ = s => document.querySelector(s);
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const money = n => new Intl.NumberFormat('es-PE',{style:'currency',currency:'PEN'}).format(Number(n));
-const image = p => (typeof p === 'string' && (p.startsWith('/img/') || p.startsWith('https://'))) ? p : '/img/placeholder.svg';
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;'
+}[c]));
+
+const money = n => new Intl.NumberFormat('es-PE', {
+  style: 'currency',
+  currency: 'PEN'
+}).format(Number(n));
+
+const image = p => (
+  typeof p === 'string' &&
+  (p.startsWith('/img/') || p.startsWith('https://'))
+) ? p : '/img/placeholder.svg';
+
 const date = d => new Date(d).toLocaleString('es-PE');
+
+// Se conserva temporalmente para compartir la selección con el catálogo actual.
 const CART = 'pixelvault.cart.v1';
-let me = {autenticado:false}, products = [], toastTimer;
+
+let me = { autenticado: false };
+let products = [];
+let toastTimer;
+
 function readCart() {
- try {const v=JSON.parse(localStorage.getItem(CART)||'[]');return Array.isArray(v)?v.filter(i=>Number.isSafeInteger(i.videojuegoId)&&i.videojuegoId>0&&Number.isInteger(i.cantidad)&&i.cantidad>0&&i.cantidad<=99).slice(0,50):[];} catch {return [];}
+  try {
+    const value = JSON.parse(localStorage.getItem(CART) || '[]');
+
+    return Array.isArray(value)
+      ? value.filter(item =>
+          Number.isSafeInteger(item.videojuegoId) &&
+          item.videojuegoId > 0 &&
+          Number.isInteger(item.cantidad) &&
+          item.cantidad > 0 &&
+          item.cantidad <= 99
+        ).slice(0, 50)
+      : [];
+  } catch {
+    return [];
+  }
 }
-function saveCart(items) {localStorage.setItem(CART,JSON.stringify(items));updateCount();}
-function updateCount() {$('#cartCount').textContent=readCart().reduce((s,i)=>s+i.cantidad,0);}
-function toast(text) {clearTimeout(toastTimer);$('#toast').textContent=text;$('#toast').hidden=false;toastTimer=setTimeout(()=>$('#toast').hidden=true,3500);}
-function notice(selector,text,type='error') {const el=$(selector);if(el)el.innerHTML=text?`<div class="notice ${type}">${esc(text)}</div>`:'';}
-async function api(url,options={}) {
- const headers=new Headers(options.headers||{});
- if(options.body && !(options.body instanceof URLSearchParams)) headers.set('Content-Type','application/json');
- if(options.method && !['GET','HEAD'].includes(options.method)) {
-  const t=await fetch('/api/csrf',{credentials:'same-origin'});
-  if(!t.ok)throw new Error('No se pudo preparar la solicitud. Recarga la página.');
-  const csrf=await t.json();headers.set(csrf.headerName,csrf.token);
- }
- const response=await fetch(url,{...options,headers,credentials:'same-origin'});
- const data=response.status===204?null:await response.json().catch(()=>null);
- if(!response.ok){const e=new Error(data?.mensaje||'No se pudo completar la solicitud.');e.status=response.status;throw e;}
- return data;
+
+function saveCart(items) {
+  localStorage.setItem(CART, JSON.stringify(items));
+  updateCount();
 }
-function bindImages(parent=document) {parent.querySelectorAll('img').forEach(img=>img.addEventListener('error',()=>{img.src='/img/placeholder.svg';},{once:true}));}
+
+function updateCount() {
+  $('#cartCount').textContent = readCart().reduce(
+    (total, item) => total + item.cantidad,
+    0
+  );
+}
+
+function toast(text) {
+  clearTimeout(toastTimer);
+  $('#toast').textContent = text;
+  $('#toast').hidden = false;
+  toastTimer = setTimeout(() => {
+    $('#toast').hidden = true;
+  }, 3500);
+}
+
+function notice(selector, text, type = 'error') {
+  const element = $(selector);
+
+  if (element) {
+    element.innerHTML = text
+      ? `<div class="notice ${type}">${esc(text)}</div>`
+      : '';
+  }
+}
+
+async function api(url, options = {}) {
+  const headers = new Headers(options.headers || {});
+
+  if (options.body && !(options.body instanceof URLSearchParams)) {
+    headers.set('Content-Type', 'application/json');
+  }
+
+  if (options.method && !['GET', 'HEAD'].includes(options.method)) {
+    const response = await fetch('/api/csrf', {
+      credentials: 'same-origin'
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        'No se pudo preparar la solicitud. Recarga la página.'
+      );
+    }
+
+    const csrf = await response.json();
+    headers.set(csrf.headerName, csrf.token);
+  }
+
+  const response = await fetch(url, {
+    ...options,
+    headers,
+    credentials: 'same-origin'
+  });
+
+  const data = response.status === 204
+    ? null
+    : await response.json().catch(() => null);
+
+  if (!response.ok) {
+    const error = new Error(
+      data?.mensaje || 'No se pudo completar la solicitud.'
+    );
+    error.status = response.status;
+    throw error;
+  }
+
+  return data;
+}
+
+function bindImages(parent = document) {
+  parent.querySelectorAll('img').forEach(img => {
+    img.addEventListener('error', () => {
+      img.src = '/img/placeholder.svg';
+    }, { once: true });
+  });
+}
+
 async function nav() {
- me=await api('/api/me');
- $('#userName').textContent=me.autenticado?`Hola, ${me.nombre}`:'';
- $('#logoutBtn').hidden=!me.autenticado;$('#ordersLink').hidden=!me.autenticado;
- if(me.rol==='ADMIN')$('#adminLink').href='/admin.html';
- $('#logoutBtn').onclick=async()=>{try{await api('/logout',{method:'POST'});location.href='/index.html';}catch(e){toast(e.message);}};
- updateCount();
+  me = await api('/api/me');
+
+  $('#userName').textContent = me.autenticado
+    ? `Hola, ${me.nombre}`
+    : '';
+
+  $('#logoutBtn').hidden = !me.autenticado;
+  $('#ordersLink').hidden = !me.autenticado;
+
+  if (me.rol === 'ADMIN') {
+    $('#adminLink').href = '/admin.html';
+  }
+
+  $('#logoutBtn').onclick = async () => {
+    try {
+      await api('/logout', { method: 'POST' });
+      location.href = '/index.html';
+    } catch (error) {
+      toast(error.message);
+    }
+  };
+
+  updateCount();
 }
+
 function addToCart(id) {
- const game=products.find(p=>p.id===id);if(!game||game.stock<1)return;
- let cart=readCart(),item=cart.find(i=>i.videojuegoId===id);
- if(item){if(item.cantidad>=Math.min(game.stock,99)){toast('Llegaste al stock disponible.');return;}item.cantidad++;}
- else {if(cart.length>=50){toast('Máximo 50 títulos por carrito.');return;}cart.push({videojuegoId:id,cantidad:1});}
- try{saveCart(cart);toast('Agregado a tu carrito');}catch{toast('No se pudo guardar el carrito. Permite el almacenamiento del navegador.');}
+  const game = products.find(product => product.id === id);
+  if (!game || game.stock < 1) return;
+
+  const cart = readCart();
+  const item = cart.find(entry => entry.videojuegoId === id);
+
+  if (item) {
+    if (item.cantidad >= Math.min(game.stock, 99)) {
+      toast('Llegaste al stock disponible.');
+      return;
+    }
+    item.cantidad++;
+  } else {
+    if (cart.length >= 50) {
+      toast('Máximo 50 títulos por carrito.');
+      return;
+    }
+    cart.push({ videojuegoId: id, cantidad: 1 });
+  }
+
+  try {
+    saveCart(cart);
+    toast('Agregado a tu selección');
+  } catch {
+    toast(
+      'No se pudo guardar el carrito. Permite el almacenamiento del navegador.'
+    );
+  }
 }
+
 async function catalog() {
- products=await api('/api/videojuegos');
- [...new Set(products.map(p=>p.genero))].sort().forEach(g=>$('#genre').add(new Option(g,g)));
- function render() {
-  const q=$('#search').value.toLocaleLowerCase(), genre=$('#genre').value;
-  const list=products.filter(p=>(!genre||p.genero===genre)&&`${p.titulo} ${p.plataforma}`.toLocaleLowerCase().includes(q));
-  list.sort($('#sort').value==='priceAsc'?(a,b)=>a.precio-b.precio:$('#sort').value==='priceDesc'?(a,b)=>b.precio-a.precio:(a,b)=>a.titulo.localeCompare(b.titulo));
-  $('#catalogCount').textContent=`${list.length} videojuegos disponibles en el catálogo`;
-  $('#games').innerHTML=list.map(p=>`<article class="card"><img class="cover" src="${esc(image(p.imagenUrl))}" alt="Portada de ${esc(p.titulo)}"><div class="card-content"><div class="row"><span class="pill">${esc(p.genero)}</span><span class="tiny muted">${esc(p.plataforma)}</span></div><h3>${esc(p.titulo)}</h3><div class="row"><span class="price">${money(p.precio)}</span><span class="stock ${p.stock===0?'out':p.stock<=5?'low':''}">${p.stock===0?'Agotado':`${p.stock} disponibles`}</span></div><div class="actions"><button class="primary" data-add="${p.id}" ${!p.stock?'disabled':''}>+ Al carrito</button><button class="ghost" data-detail="${p.id}" aria-label="Ver detalle de ${esc(p.titulo)}">Detalle</button></div></div></article>`).join('')||'<div class="empty"><h2>Sin coincidencias</h2><p>Prueba con otro título o género.</p></div>';
-  bindImages($('#games'));
- }
- ['search','genre','sort'].forEach(id=>$('#'+id).addEventListener('input',render));
- $('#games').onclick=e=>{const add=e.target.closest('[data-add]'),detail=e.target.closest('[data-detail]');if(add)addToCart(Number(add.dataset.add));if(detail){const p=products.find(g=>g.id===Number(detail.dataset.detail));$('#detailContent').innerHTML=`<img src="${esc(image(p.imagenUrl))}" alt="${esc(p.titulo)}"><span class="pill">${esc(p.plataforma)}</span><h2 style="margin-top:18px">${esc(p.titulo)}</h2><p class="muted">${esc(p.descripcion||'Descubre tu próxima aventura con este videojuego.')}</p><p class="price">${money(p.precio)}</p><button class="primary" id="detailAdd" ${!p.stock?'disabled':''}>Agregar al carrito</button>`;bindImages($('#detailContent'));$('#detailAdd').onclick=()=>addToCart(p.id);$('#details').showModal();}};
- $('#closeDetails').onclick=()=>$('#details').close();render();
+  products = await api('/api/videojuegos');
+
+  [...new Set(products.map(product => product.genero))]
+    .sort()
+    .forEach(genre => {
+      $('#genre').add(new Option(genre, genre));
+    });
+
+  function render() {
+    const query = $('#search').value.toLocaleLowerCase();
+    const genre = $('#genre').value;
+
+    const list = products.filter(product =>
+      (!genre || product.genero === genre) &&
+      `${product.titulo} ${product.autor || product.plataforma}`
+        .toLocaleLowerCase()
+        .includes(query)
+    );
+
+    list.sort(
+      $('#sort').value === 'stockDesc'
+        ? (a, b) => b.stock - a.stock
+        : (a, b) => a.titulo.localeCompare(b.titulo)
+    );
+
+    $('#catalogCount').textContent =
+      `${list.length} títulos en el catálogo`;
+
+    $('#games').innerHTML = list.map(product => `
+      <article class="card">
+        <img
+          class="cover"
+          src="${esc(image(product.imagenUrl))}"
+          alt="Portada de ${esc(product.titulo)}"
+        >
+        <div class="card-content">
+          <div class="row">
+            <span class="pill">${esc(product.genero)}</span>
+            <span class="tiny muted">${esc(product.plataforma)}</span>
+          </div>
+          <h3>${esc(product.titulo)}</h3>
+          <div class="row">
+            <span class="tiny muted">Préstamo por 7 días</span>
+            <span class="stock ${
+              product.stock === 0 ? 'out' : product.stock <= 5 ? 'low' : ''
+            }">
+              ${product.stock === 0
+                ? 'Agotado'
+                : `${product.stock} disponibles`}
+            </span>
+          </div>
+          <div class="actions">
+            <button
+              class="primary"
+              data-add="${product.id}"
+              ${!product.stock ? 'disabled' : ''}
+            >
+              + Seleccionar
+            </button>
+            <button
+              class="ghost"
+              data-detail="${product.id}"
+              aria-label="Ver detalle de ${esc(product.titulo)}"
+            >
+              Detalle
+            </button>
+          </div>
+        </div>
+      </article>
+    `).join('') || `
+      <div class="empty">
+        <h2>Sin coincidencias</h2>
+        <p>Prueba con otro título o género.</p>
+      </div>
+    `;
+
+    bindImages($('#games'));
+  }
+
+  ['search', 'genre', 'sort'].forEach(id => {
+    $('#' + id).addEventListener('input', render);
+  });
+
+  $('#games').onclick = event => {
+    const add = event.target.closest('[data-add]');
+    const detail = event.target.closest('[data-detail]');
+
+    if (add) {
+      addToCart(Number(add.dataset.add));
+    }
+
+    if (detail) {
+      const product = products.find(
+        item => item.id === Number(detail.dataset.detail)
+      );
+
+      $('#detailContent').innerHTML = `
+        <img
+          src="${esc(image(product.imagenUrl))}"
+          alt="${esc(product.titulo)}"
+        >
+        <span class="pill">${esc(product.plataforma)}</span>
+        <h2 style="margin-top:18px">${esc(product.titulo)}</h2>
+        <p class="muted">
+          ${esc(
+            product.descripcion ||
+            'Descubre una nueva historia en nuestra biblioteca.'
+          )}
+        </p>
+        <p class="stock">${product.stock} ejemplares disponibles</p>
+        <button
+          class="primary"
+          id="detailAdd"
+          ${!product.stock ? 'disabled' : ''}
+        >
+          Seleccionar libro
+        </button>
+      `;
+
+      bindImages($('#detailContent'));
+      $('#detailAdd').onclick = () => addToCart(product.id);
+      $('#details').showModal();
+    }
+  };
+
+  $('#closeDetails').onclick = () => $('#details').close();
+  render();
 }
+
 function cartDetails() {
- return readCart().map(i=>({...i,game:products.find(g=>g.id===i.videojuegoId)}));
+  return readCart().map(item => ({
+    ...item,
+    game: products.find(product => product.id === item.videojuegoId)
+  }));
 }
-function totals(items) {return items.reduce((s,i)=>s+(i.game?i.game.precio*i.cantidad:0),0);}
-function validCart(items) {return items.length>0&&items.every(i=>i.game&&i.game.activo&&i.game.stock>=i.cantidad);}
-function summary(items,button) {return `<aside class="panel summary"><h2>Resumen</h2><div class="row"><span class="muted">Unidades</span><span>${items.reduce((s,i)=>s+i.cantidad,0)}</span></div><div class="row"><span class="muted">Subtotal</span><span>${money(totals(items))}</span></div><div class="row"><span class="muted">Costos adicionales</span><span>${money(0)}</span></div><div class="row total"><span>Total</span><span>${money(totals(items))}</span></div>${button}<p class="tiny muted" style="margin-top:16px">Demostración académica. No se realiza ningún cobro real.</p></aside>`;}
+
+function validCart(items) {
+  return items.length > 0 && items.every(item =>
+    item.game &&
+    item.game.activo &&
+    item.game.stock >= item.cantidad
+  );
+}
+
+// Selección de libros de AulaLibro.
 async function cartPage() {
- products=await api('/api/videojuegos');
- function render() {
-  const items=cartDetails();
-  if(!items.length){$('#cartView').innerHTML='<div class="empty"><div class="eyebrow">Una nueva partida te espera</div><h2>Tu carrito está vacío</h2><p>Explora el catálogo y encuentra tu próximo juego.</p><a class="btn primary" href="/index.html#catalogo">Descubrir videojuegos</a></div>';return;}
-  $('#cartView').innerHTML=`<div class="split"><section class="panel">${items.map(i=>`<article class="cart-item"><img src="${esc(image(i.game?.imagenUrl))}" alt="Portada"><div><h3>${esc(i.game?.titulo||'Videojuego no disponible')}</h3><p class="muted tiny">${esc(i.game?.plataforma||'Retira este producto para continuar.')}</p><div class="qty"><label class="sr-only" for="qty-${i.videojuegoId}">Cantidad de ${esc(i.game?.titulo)}</label><input id="qty-${i.videojuegoId}" type="number" min="1" max="99" value="${i.cantidad}" data-qty="${i.videojuegoId}"><button class="small ghost danger" data-remove="${i.videojuegoId}">Quitar</button></div>${i.game&&i.cantidad>i.game.stock?`<span class="stock out">Stock actual: ${i.game.stock}. Ajusta la cantidad.</span>`:''}</div><span class="price">${i.game?money(i.game.precio*i.cantidad):'—'}</span></article>`).join('')}<a class="btn ghost small" style="margin-top:20px" href="/index.html">← Seguir explorando</a></section>${summary(items,`<button id="checkout" class="primary full" style="margin-top:18px" ${validCart(items)?'':'disabled'}>Continuar al pago →</button>${!me.autenticado?'<p class="tiny muted">Te pediremos iniciar sesión en el siguiente paso.</p>':''}`)}</div>`;
-  bindImages($('#cartView'));$('#checkout').onclick=()=>location.href=me.autenticado?'/pago.html':'/login.html?next=pagar';
- }
- $('#cartView').onclick=e=>{const b=e.target.closest('[data-remove]');if(b){saveCart(readCart().filter(i=>i.videojuegoId!==Number(b.dataset.remove)));render();}};
- $('#cartView').onchange=e=>{if(!e.target.matches('[data-qty]'))return;const qty=Number(e.target.value);if(!Number.isInteger(qty)||qty<1||qty>99){toast('La cantidad debe estar entre 1 y 99.');render();return;}saveCart(readCart().map(i=>i.videojuegoId===Number(e.target.dataset.qty)?{...i,cantidad:qty}:i));render();};render();
+  products = await api('/api/videojuegos');
+  const vista = $('#cartView');
+
+  function render() {
+    const items = cartDetails();
+
+    if (!items.length) {
+      vista.innerHTML = `
+        <div class="empty">
+          <div class="eyebrow">Una nueva lectura te espera</div>
+          <h2>Tu selección está vacía</h2>
+          <p>Explora el catálogo y selecciona los libros que necesitas.</p>
+          <a class="btn primary" href="/index.html#catalogo">
+            Explorar catálogo
+          </a>
+        </div>
+      `;
+      return;
+    }
+
+    const cantidad = items.reduce(
+      (total, item) => total + item.cantidad,
+      0
+    );
+
+    vista.innerHTML = `
+      <div class="split">
+        <section class="panel" aria-label="Libros seleccionados">
+          ${items.map(item => `
+            <article class="cart-item">
+              <img
+                src="${esc(image(item.game?.imagenUrl))}"
+                alt="Portada de ${esc(
+                  item.game?.titulo || 'libro no disponible'
+                )}"
+              >
+              <div>
+                <h3>${esc(item.game?.titulo || 'Libro no disponible')}</h3>
+                <p class="muted tiny">${esc(item.game?.autor || item.game?.plataforma || '')}</p>
+                <div class="qty">
+                  <label for="qty-${item.videojuegoId}">
+                    Ejemplares
+                  </label>
+                  <input
+                    id="qty-${item.videojuegoId}"
+                    type="number"
+                    min="1"
+                    max="99"
+                    value="${item.cantidad}"
+                    data-qty="${item.videojuegoId}"
+                  >
+                  <button
+                    type="button"
+                    class="small ghost danger"
+                    data-remove="${item.videojuegoId}"
+                    aria-label="Quitar ${esc(item.game?.titulo || 'libro')}"
+                  >
+                    Quitar
+                  </button>
+                </div>
+                ${!item.game || !item.game.activo
+                  ? '<p class="stock out">Libro no disponible. Retíralo para continuar.</p>'
+                  : item.cantidad > item.game.stock
+                    ? `<p class="stock out">Ejemplares disponibles: ${item.game.stock}. Ajusta la cantidad.</p>`
+                    : ''}
+              </div>
+            </article>
+          `).join('')}
+
+          <a class="btn ghost small" href="/index.html#catalogo">
+            Seguir seleccionando libros
+          </a>
+        </section>
+
+        <aside class="panel summary">
+          <h2>Resumen de la selección</h2>
+          <div class="row">
+            <span>Títulos seleccionados</span>
+            <strong>${items.length}</strong>
+          </div>
+          <div class="row">
+            <span>Total de ejemplares</span>
+            <strong>${cantidad}</strong>
+          </div>
+          <button
+            id="checkout"
+            type="button"
+            class="primary full"
+            style="margin-top:18px"
+            ${validCart(items) ? '' : 'disabled'}
+          >
+            Solicitar préstamo →
+          </button>
+          ${!me.autenticado
+            ? '<p class="tiny muted">Inicia sesión en el siguiente paso para continuar.</p>'
+            : ''}
+        </aside>
+      </div>
+    `;
+
+    bindImages(vista);
+
+    // Ruta temporal hasta integrar la pantalla de préstamos.
+    $('#checkout').onclick = () => {
+      location.href = me.autenticado
+        ? '/pago.html'
+        : '/login.html?next=pagar';
+    };
+  }
+
+  function guardarSeleccion(items) {
+    try {
+      saveCart(items);
+    } catch {
+      notice(
+        '#cartError',
+        'No se pudo guardar la selección. Revisa el almacenamiento del navegador.'
+      );
+      render();
+      return false;
+    }
+
+    notice('#cartError', '');
+    render();
+    return true;
+  }
+
+  vista.onclick = event => {
+    const boton = event.target.closest('[data-remove]');
+    if (!boton) return;
+
+    const id = Number(boton.dataset.remove);
+    const seleccion = readCart().filter(
+      item => item.videojuegoId !== id
+    );
+
+    if (guardarSeleccion(seleccion)) {
+      toast('Libro retirado de la selección.');
+    }
+  };
+
+  vista.onchange = event => {
+    if (!event.target.matches('[data-qty]')) return;
+
+    const cantidad = Number(event.target.value);
+
+    if (!Number.isInteger(cantidad) || cantidad < 1 || cantidad > 99) {
+      toast('La cantidad debe estar entre 1 y 99.');
+      render();
+      return;
+    }
+
+    const id = Number(event.target.dataset.qty);
+
+    guardarSeleccion(
+      readCart().map(item =>
+        item.videojuegoId === id
+          ? { ...item, cantidad }
+          : item
+      )
+    );
+  };
+
+  vista.addEventListener('seleccion-vaciada', render);
+  render();
 }
-function nextTarget() {const n=new URLSearchParams(location.search).get('next');return ['pagar','admin','pedidos'].includes(n)?n:'';}
-function afterLogin() {const n=nextTarget();if(n==='pagar')return '/pago.html';if(n==='pedidos')return '/pedidos.html';if(me.rol==='ADMIN')return '/admin.html';return '/index.html';}
-async function authPage(register=false) {
- const next=nextTarget(),query=next?'?next='+next:'';
- if(me.autenticado&&!register){if(next==='admin'&&me.rol!=='ADMIN'){notice('#authMessage','Tu cuenta es de cliente. Usa una cuenta administradora para entrar al panel.');return;}location.replace(afterLogin());return;}
- if(register)$('#loginLink').href='/login.html'+query;else $('#registerLink').href='/registro.html'+query;
- const form=$(register?'#registerForm':'#loginForm');
- form.onsubmit=async e=>{
-  e.preventDefault();const btn=form.querySelector('button:not(.pass-toggle)');btn.disabled=true;notice('#authMessage','');
-  try {
-   const data=Object.fromEntries(new FormData(form));data.correo=data.correo.trim().toLowerCase();
-   if(register){await api('/api/auth/registro',{method:'POST',body:JSON.stringify(data)});location.href='/login.html'+(query?query+'&':'?')+'creada=1';}
-   else{await api('/procesar-login',{method:'POST',body:new URLSearchParams(data)});me=await api('/api/me');if(next==='admin'&&me.rol!=='ADMIN'){await nav();notice('#authMessage','Accediste como cliente. El panel requiere una cuenta administradora.');return;}location.href=afterLogin();}
-  }catch(error){notice('#authMessage',error.message);}finally{btn.disabled=false;}
- };
- if(!register&&new URLSearchParams(location.search).has('creada'))notice('#authMessage','Cuenta creada. Inicia sesión para continuar.','success');
+
+function nextTarget() {
+  const next = new URLSearchParams(location.search).get('next');
+  return ['pagar', 'admin', 'pedidos'].includes(next) ? next : '';
 }
+
+function afterLogin() {
+  const next = nextTarget();
+
+  if (next === 'pagar') return '/pago.html';
+  if (next === 'pedidos') return '/pedidos.html';
+  if (me.rol === 'ADMIN') return '/admin.html';
+
+  return '/index.html';
+}
+
+async function authPage(register = false) {
+  const next = nextTarget();
+  const query = next ? '?next=' + next : '';
+
+  if (me.autenticado && !register) {
+    if (next === 'admin' && me.rol !== 'ADMIN') {
+      notice(
+        '#authMessage',
+        'Tu cuenta es de lector. Usa una cuenta administradora para entrar al panel.'
+      );
+      return;
+    }
+
+    location.replace(afterLogin());
+    return;
+  }
+
+  if (register) {
+    $('#loginLink').href = '/login.html' + query;
+  } else {
+    $('#registerLink').href = '/registro.html' + query;
+  }
+
+  const form = $(register ? '#registerForm' : '#loginForm');
+
+  form.onsubmit = async event => {
+    event.preventDefault();
+
+    const button = form.querySelector('button:not(.pass-toggle)');
+    button.disabled = true;
+    notice('#authMessage', '');
+
+    try {
+      const data = Object.fromEntries(new FormData(form));
+      data.correo = data.correo.trim().toLowerCase();
+
+      if (register) {
+        await api('/api/auth/registro', {
+          method: 'POST',
+          body: JSON.stringify(data)
+        });
+
+        location.href =
+          '/login.html' + (query ? query + '&' : '?') + 'creada=1';
+      } else {
+        await api('/procesar-login', {
+          method: 'POST',
+          body: new URLSearchParams(data)
+        });
+
+        me = await api('/api/me');
+
+        if (next === 'admin' && me.rol !== 'ADMIN') {
+          await nav();
+          notice(
+            '#authMessage',
+            'Accediste como lector. El panel requiere una cuenta administradora.'
+          );
+          return;
+        }
+
+        location.href = afterLogin();
+      }
+    } catch (error) {
+      notice('#authMessage', error.message);
+    } finally {
+      button.disabled = false;
+    }
+  };
+
+  if (
+    !register &&
+    new URLSearchParams(location.search).has('creada')
+  ) {
+    notice(
+      '#authMessage',
+      'Cuenta creada. Inicia sesión para continuar.',
+      'success'
+    );
+  }
+}
+
+
+const loanDay = value => new Intl.DateTimeFormat('es-PE', {
+  dateStyle: 'long', timeZone: 'America/Lima'
+}).format(new Date(value + 'T12:00:00-05:00'));
+
 async function payment() {
- if(!me.autenticado){location.replace('/login.html?next=pagar');return;}
- products=await api('/api/videojuegos');const items=cartDetails();
- if(!validCart(items)){$('#paymentView').innerHTML='<div class="empty"><h2>Revisa tu carrito</h2><p>Está vacío o cambió la disponibilidad de un juego.</p><a class="btn primary" href="/carrito.html">Volver al carrito</a></div>';return;}
- $('#paymentView').innerHTML=`<div class="split"><section class="panel"><span class="pill">PASARELA DE DEMOSTRACIÓN</span><h2 style="margin-top:20px">Elige un método de prueba</h2><p class="muted">Comprando como <strong>${esc(me.correo)}</strong></p><div class="notice">Este pago es simulado. No ingreses números de tarjeta, CVV ni datos bancarios reales.</div><form id="payForm"><div class="pay-options"><label class="pay-option"><input type="radio" name="metodo" value="TARJETA_DEMO" checked><span>▣ Tarjeta de prueba</span></label><label class="pay-option"><input type="radio" name="metodo" value="YAPE_DEMO"><span>◈ Yape de prueba</span></label></div><label for="outcome">Escenario de la simulación</label><select id="outcome" name="resultado"><option value="APROBADO">Pago aprobado</option><option value="RECHAZADO">Pago rechazado (para probar)</option></select><label class="pay-option" style="margin-top:20px"><input type="checkbox" required><span class="tiny">Entiendo que es una compra de demostración y no habrá cargos reales.</span></label><button class="primary full" id="payButton" style="margin-top:15px">Confirmar pago simulado · ${money(totals(items))}</button></form></section>${summary(items,items.map(i=>`<p class="tiny">${esc(i.game.titulo)} × ${i.cantidad}</p>`).join(''))}</div>`;
- $('#payForm').onsubmit=async e=>{
-  e.preventDefault();const btn=$('#payButton');btn.disabled=true;btn.textContent='Procesando…';notice('#paymentError','');
+  if (!me.autenticado) { location.replace('/login.html?next=pagar'); return; }
+  products = await api('/api/videojuegos');
+  const items = cartDetails();
+  if (!validCart(items)) {
+    $('#paymentView').innerHTML = '<div class="empty"><h2>Revisa tu selección</h2><p>Está vacía o cambió la disponibilidad de un libro.</p><a class="btn primary" href="/carrito.html">Volver a mi selección</a></div>';
+    return;
+  }
+  const signature = JSON.stringify(readCart());
+  $('#paymentView').innerHTML = `
+    <div class="split"><section class="panel">
+      <span class="pill">PRÉSTAMO GRATUITO · 7 DÍAS</span>
+      <h2 style="margin-top:20px">Una nueva lectura te espera</h2>
+      <p class="muted">Solicitando como <strong>${esc(me.correo)}</strong></p>
+      <p>El plazo comienza al confirmar. La fecha límite exacta quedará registrada en Mis préstamos. Devuelve los ejemplares en la biblioteca para que el administrador registre su recepción.</p>
+      <form id="payForm">
+        <label class="pay-option"><input type="checkbox" required><span>Me comprometo a cuidar los libros y devolverlos dentro de los 7 días.</span></label>
+        <button class="primary full" id="payButton">Confirmar préstamo gratuito</button>
+      </form>
+    </section><aside class="panel summary"><h2>Tu selección</h2>
+      ${items.map(i => `<div class="row"><span>${esc(i.game.titulo)}</span><strong>× ${i.cantidad}</strong></div>`).join('')}
+      <p class="notice">Sin pagos ni cargos. Plazo: 7 días calendario.</p>
+    </aside></div>`;
+  $('#payForm').onsubmit = async event => {
+    event.preventDefault();
+    const button = $('#payButton');
+    button.disabled = true;
+    notice('#paymentError', '');
+    try {
+      if (JSON.stringify(readCart()) !== signature) throw new Error('La selección cambió. Recarga esta página antes de confirmar.');
+      let key = sessionStorage.getItem('aulalibro.loan.key');
+      if (!key || sessionStorage.getItem('aulalibro.loan.items') !== signature) {
+        key = crypto.randomUUID();
+        sessionStorage.setItem('aulalibro.loan.key', key);
+        sessionStorage.setItem('aulalibro.loan.items', signature);
+      }
+      const loan = await api('/api/prestamos', { method: 'POST', body: JSON.stringify({items: readCart(), clave: key}) });
+      // Una falla de almacenamiento local no debe crear otro préstamo.
+      try {
+        saveCart([]);
+        sessionStorage.removeItem('aulalibro.loan.key');
+        sessionStorage.removeItem('aulalibro.loan.items');
+      } catch {}
+      location.href = '/pedidos.html?prestamo=' + encodeURIComponent(loan.id);
+    } catch (error) {
+      notice('#paymentError', error.message);
+      if (error.status === 401) location.href = '/login.html?next=pagar';
+    } finally { button.disabled = false; }
+  };
+}
+
+function orderMarkup(loan, admin = false) {
+  const focus = new URLSearchParams(location.search).get('prestamo') === loan.id;
+  return `<article class="panel ${focus ? 'focus-order' : ''}">
+    ${focus ? '<div class="notice success">Préstamo registrado correctamente.</div>' : ''}
+    <div class="order-head"><div><div class="eyebrow">Préstamo ${esc(loan.id.slice(0,8))}</div>
+      <h3>${esc(date(loan.fecha))}</h3>
+      ${admin ? `<p class="muted">${esc(loan.usuario)}</p>` : ''}
+    </div><span class="pill">${esc(loan.estado)}</span></div>
+    <div class="order-lines">${loan.items.map(i => `<div class="row"><span>${esc(i.titulo)}</span><strong>${i.cantidad} ejemplar(es)</strong></div>`).join('')}</div>
+    <p>Devolver hasta el <strong>${esc(loanDay(loan.fechaLimite))}</strong>.</p>
+    ${loan.fechaDevolucion ? `<p class="stock">Devolución registrada: ${esc(date(loan.fechaDevolucion))}</p>` : ''}
+    ${admin && loan.estado !== 'DEVUELTO' ? `<button class="primary" data-return="${esc(loan.id)}">Registrar devolución</button>` : ''}
+  </article>`;
+}
+
+async function ordersPage() {
+  if (!me.autenticado) { location.replace('/login.html?next=pedidos'); return; }
+  const loans = await api('/api/prestamos');
+  $('#orders').innerHTML = loans.map(l => orderMarkup(l)).join('') ||
+    '<div class="empty"><h2>Todavía no tienes préstamos</h2><p>Encuentra tu próxima lectura en el catálogo.</p><a class="btn primary" href="/index.html">Explorar libros</a></div>';
+}
+
+async function adminPage() {
+  if (!me.autenticado) {
+    location.replace('/login.html?next=admin');
+    return;
+  }
+
+  if (me.rol !== 'ADMIN') {
+    $('main').innerHTML = `
+      <div class="empty">
+        <h1>Acceso exclusivo de administración</h1>
+        <a class="btn primary" href="/index.html">Ir al catálogo</a>
+      </div>
+    `;
+    return;
+  }
+
+  let orders = [];
+
+  async function render() {
+    products = await api('/api/videojuegos');
+    orders = await api('/api/admin/prestamos');
+
+    $('#metrics').innerHTML = `
+      <div class="panel">
+        <span class="muted tiny">Libros</span>
+        <strong>${products.length}</strong>
+      </div>
+      <div class="panel">
+        <span class="muted tiny">Unidades en stock</span>
+        <strong>${products.reduce((total, product) => total + product.stock, 0)}</strong>
+      </div>
+      <div class="panel">
+        <span class="muted tiny">Préstamos pendientes</span>
+        <strong>${orders.filter(loan => loan.estado !== 'DEVUELTO').length}</strong>
+      </div>
+    `;
+
+    $('#inventory').innerHTML = products.map(product => `
+      <tr>
+        <td>
+          <strong>${esc(product.titulo)}</strong><br>
+          <span class="tiny muted">${esc(product.genero)}</span>
+        </td>
+        <td>${esc(product.plataforma)}</td>
+        <td>7 días</td>
+        <td>${product.stock}</td>
+        <td>${product.activo ? 'Publicado' : 'Oculto'}</td>
+        <td>
+          <div class="actions">
+            <button class="small" data-edit="${product.id}">Editar</button>
+            <button class="small ghost danger" data-delete="${product.id}">
+              Eliminar
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('') || `
+      <tr>
+        <td colspan="6">No hay libros. Agrega el primero.</td>
+      </tr>
+    `;
+
+    $('#adminOrders').innerHTML =
+      orders.map(order => orderMarkup(order, true)).join('') ||
+      '<p class="muted">Todavía no hay préstamos.</p>';
+  }
+
+  const form = $('#productForm');
+
+  function open(product) {
+    form.reset();
+    form.elements.id.value = product?.id || '';
+
+    for (const key of [
+      'titulo',
+      'descripcion',
+      'genero',
+      'plataforma',
+      'stock',
+      'imagenUrl'
+    ]) {
+      form.elements[key].value = product?.[key] ?? '';
+    }
+
+    form.elements.activo.value = String(product?.activo ?? true);
+    $('#productTitle').textContent = product
+      ? 'Editar libro'
+      : 'Nuevo libro';
+
+    notice('#productError', '');
+    $('#productDialog').showModal();
+  }
+
+  $('#adminOrders').onclick = async event => {
+    const button = event.target.closest('[data-return]');
+    if (!button || !confirm('¿Confirmas que recibiste todos los ejemplares de este préstamo?')) return;
+    button.disabled = true;
+    try {
+      await api('/api/admin/prestamos/' + encodeURIComponent(button.dataset.return) + '/devolucion', {method:'POST'});
+      notice('#adminError', '');
+      await render();
+      toast('Devolución registrada. Ejemplares repuestos.');
+    } catch(error) { notice('#adminError', error.message); }
+    finally { button.disabled = false; }
+  };
+  $('#newProduct').onclick = () => open(null);
+  $('#closeProduct').onclick = () => $('#productDialog').close();
+
+  $('#inventory').onclick = async event => {
+    const edit = event.target.closest('[data-edit]');
+    const remove = event.target.closest('[data-delete]');
+
+    if (edit) {
+      open(products.find(product => product.id === Number(edit.dataset.edit)));
+    }
+
+    if (remove) {
+      if (!confirm(
+        '¿Eliminar el libro? Los registros anteriores se conservarán.'
+      )) {
+        return;
+      }
+
+      remove.disabled = true;
+
+      try {
+        await api('/api/videojuegos/' + remove.dataset.delete, {
+          method: 'DELETE'
+        });
+
+        await render();
+        toast('Libro eliminado.');
+      } catch (error) {
+        notice('#adminError', error.message);
+      } finally {
+        remove.disabled = false;
+      }
+    }
+  };
+
+  form.onsubmit = async event => {
+    event.preventDefault();
+
+    const button = form.querySelector('button');
+    button.disabled = true;
+    notice('#productError', '');
+
+    try {
+      const data = Object.fromEntries(new FormData(form));
+      const id = data.id;
+      delete data.id;
+
+      data.precio = 0;
+      data.stock = Number(data.stock);
+      data.activo = data.activo === 'true';
+
+      await api('/api/videojuegos' + (id ? '/' + id : ''), {
+        method: id ? 'PUT' : 'POST',
+        body: JSON.stringify(data)
+      });
+
+      $('#productDialog').close();
+      await render();
+      toast('Libro guardado.');
+    } catch (error) {
+      notice('#productError', error.message);
+    } finally {
+      button.disabled = false;
+    }
+  };
+
+  await render();
+}
+
+(async () => {
   try {
-   const lines=readCart(),signature=JSON.stringify(lines);let key=sessionStorage.getItem('pixelvault.pay.key');
-   if(!key||sessionStorage.getItem('pixelvault.pay.cart')!==signature){key=crypto.randomUUID();sessionStorage.setItem('pixelvault.pay.key',key);sessionStorage.setItem('pixelvault.pay.cart',signature);}
-   const form=Object.fromEntries(new FormData(e.target));
-   const order=await api('/api/pedidos',{method:'POST',body:JSON.stringify({items:lines,metodo:form.metodo,resultado:form.resultado,clave:key})});
-   saveCart([]);sessionStorage.removeItem('pixelvault.pay.key');sessionStorage.removeItem('pixelvault.pay.cart');location.href='/pedidos.html?pedido='+encodeURIComponent(order.id);
-  }catch(error){notice('#paymentError',error.message);if(error.status===401){location.href='/login.html?next=pagar';return;}if(error.status===409){notice('#paymentError',error.message+' Vuelve al carrito para actualizar la disponibilidad.');}}
-  finally{btn.disabled=false;btn.textContent='Confirmar pago simulado · '+money(totals(items));}
- };
-}
-function orderMarkup(o,admin=false) {const focus=new URLSearchParams(location.search).get('pedido')===o.id;return `<article class="panel ${focus?'focus-order':''}">${focus?'<div class="notice success">¡Compra de demostración confirmada! Tu pedido quedó registrado.</div>':''}<div class="order-head"><div><div class="eyebrow">Pedido ${esc(o.id.slice(0,8))}</div><h3>${esc(date(o.fecha))}</h3>${admin?`<p class="muted tiny">${esc(o.usuario)}</p>`:''}</div><div><span class="pill">Pagado · simulación</span><p class="price" style="margin-top:10px;margin-bottom:0">${money(o.total)}</p></div></div><div class="order-lines">${o.items.map(i=>`<div class="row"><span>${esc(i.titulo)} × ${i.cantidad}</span><span>${money(i.precio*i.cantidad)}</span></div>`).join('')}</div><p class="tiny muted" style="margin-bottom:0">${o.metodo==='YAPE_DEMO'?'Yape':'Tarjeta'} de prueba · No constituye un cobro real ni una licencia activable.</p></article>`;}
-async function ordersPage(){if(!me.autenticado){location.replace('/login.html?next=pedidos');return;}const orders=await api('/api/pedidos');$('#orders').innerHTML=orders.map(o=>orderMarkup(o)).join('')||'<div class="empty"><h2>Todavía no tienes pedidos</h2><p>Tu primera aventura te espera en el catálogo.</p></div>';}
-async function adminPage(){
- if(!me.autenticado){location.replace('/login.html?next=admin');return;}
- if(me.rol!=='ADMIN'){$('main').innerHTML='<div class="empty"><h1>Acceso exclusivo de administración</h1><a class="btn primary" href="/index.html">Ir al catálogo</a></div>';return;}
- let orders=[];
- async function render(){products=await api('/api/videojuegos');orders=await api('/api/admin/pedidos');$('#metrics').innerHTML=`<div class="panel"><span class="muted tiny">Videojuegos</span><strong>${products.length}</strong></div><div class="panel"><span class="muted tiny">Unidades en stock</span><strong>${products.reduce((s,p)=>s+p.stock,0)}</strong></div><div class="panel"><span class="muted tiny">Ventas simuladas</span><strong>${money(orders.reduce((s,o)=>s+o.total,0))}</strong></div>`;
- $('#inventory').innerHTML=products.map(p=>`<tr><td><strong>${esc(p.titulo)}</strong><br><span class="tiny muted">${esc(p.genero)}</span></td><td>${esc(p.plataforma)}</td><td>${money(p.precio)}</td><td>${p.stock}</td><td>${p.activo?'Publicado':'Oculto'}</td><td><div class="actions"><button class="small" data-edit="${p.id}">Editar</button><button class="small ghost danger" data-delete="${p.id}">Eliminar</button></div></td></tr>`).join('')||'<tr><td colspan="6">No hay videojuegos. Agrega el primero.</td></tr>';
- $('#adminOrders').innerHTML=orders.map(o=>orderMarkup(o,true)).join('')||'<p class="muted">Todavía no hay pedidos.</p>';}
- const form=$('#productForm');
- function open(p){form.reset();form.elements.id.value=p?.id||'';for(const k of ['titulo','descripcion','genero','plataforma','precio','stock','imagenUrl'])form.elements[k].value=p?.[k]??'';form.elements.activo.value=String(p?.activo??true);$('#productTitle').textContent=p?'Editar videojuego':'Nuevo videojuego';notice('#productError','');$('#productDialog').showModal();}
- $('#newProduct').onclick=()=>open(null);$('#closeProduct').onclick=()=>$('#productDialog').close();
- $('#inventory').onclick=async e=>{const edit=e.target.closest('[data-edit]'),del=e.target.closest('[data-delete]');if(edit)open(products.find(p=>p.id===Number(edit.dataset.edit)));if(del){if(!confirm('¿Eliminar el videojuego? Los pedidos anteriores se conservarán.'))return;del.disabled=true;try{await api('/api/videojuegos/'+del.dataset.delete,{method:'DELETE'});await render();toast('Videojuego eliminado.');}catch(error){notice('#adminError',error.message);}finally{del.disabled=false;}}};
- form.onsubmit=async e=>{e.preventDefault();const btn=form.querySelector('button');btn.disabled=true;notice('#productError','');try{const d=Object.fromEntries(new FormData(form)),id=d.id;delete d.id;d.precio=Number(d.precio);d.stock=Number(d.stock);d.activo=d.activo==='true';await api('/api/videojuegos'+(id?'/'+id:''),{method:id?'PUT':'POST',body:JSON.stringify(d)});$('#productDialog').close();await render();toast('Videojuego guardado.');}catch(error){notice('#productError',error.message);}finally{btn.disabled=false;}};
- await render();
-}
-(async()=>{try{await nav();const p=document.body.dataset.page;if(p==='catalog')await catalog();if(p==='cart')await cartPage();if(p==='login')await authPage();if(p==='register')await authPage(true);if(p==='payment')await payment();if(p==='orders')await ordersPage();if(p==='admin')await adminPage();}catch(e){const id={catalog:'#catalogError',cart:'#cartError',payment:'#paymentError',admin:'#adminError',orders:'#orders',login:'#authMessage',register:'#authMessage'}[document.body.dataset.page];notice(id,e.message);}})();
-window.addEventListener('storage',e=>{if(e.key===CART){updateCount();if(['cart','payment'].includes(document.body.dataset.page))location.reload();}});
-// Mostrar u ocultar contraseña
-document.querySelectorAll('.pass-toggle').forEach(function (btn) {
-  btn.addEventListener('click', function () {
-    var input = document.getElementById(btn.dataset.target);
-    var visible = input.type === 'text';
+    await nav();
+
+    const page = document.body.dataset.page;
+
+    if (page === 'catalog') await catalog();
+    if (page === 'cart') await cartPage();
+    if (page === 'login') await authPage();
+    if (page === 'register') await authPage(true);
+    if (page === 'payment') await payment();
+    if (page === 'orders') await ordersPage();
+    if (page === 'admin') await adminPage();
+  } catch (error) {
+    const selectors = {
+      catalog: '#catalogError',
+      cart: '#cartError',
+      payment: '#paymentError',
+      admin: '#adminError',
+      orders: '#orders',
+      login: '#authMessage',
+      register: '#authMessage'
+    };
+
+    notice(selectors[document.body.dataset.page], error.message);
+  }
+})();
+
+window.addEventListener('storage', event => {
+  if (event.key === CART) {
+    updateCount();
+
+    if (['cart', 'payment'].includes(document.body.dataset.page)) {
+      location.reload();
+    }
+  }
+});
+
+// Mostrar u ocultar contraseña.
+document.querySelectorAll('.pass-toggle').forEach(button => {
+  button.addEventListener('click', () => {
+    const input = document.getElementById(button.dataset.target);
+    const visible = input.type === 'text';
+
     input.type = visible ? 'password' : 'text';
-    btn.textContent = visible ? 'Mostrar' : 'Ocultar'; btn.setAttribute('aria-pressed', String(!visible)); btn.setAttribute('aria-label', visible ? 'Mostrar contraseña' : 'Ocultar contraseña');
+    button.textContent = visible ? 'Mostrar' : 'Ocultar';
+    button.setAttribute('aria-pressed', String(!visible));
+    button.setAttribute(
+      'aria-label',
+      visible ? 'Mostrar contraseña' : 'Ocultar contraseña'
+    );
   });
 });
-// Indicador de longitud de contraseña
-(function () {
-  var input = document.getElementById('password');
-  var bar = document.getElementById('passBar');
-  var count = document.getElementById('passCount');
+
+// Indicador de longitud de contraseña.
+(() => {
+  const input = document.getElementById('password');
+  const bar = document.getElementById('passBar');
+  const count = document.getElementById('passCount');
+
   if (!input || !bar || !count) return;
-  input.addEventListener('input', function () {
-    var len = input.value.length;
-    count.textContent = len + ' de 64 caracteres';
-    bar.style.width = Math.min(len / 8, 1) * 100 + '%'; var hint = document.getElementById('passHint'); if (hint) { hint.textContent = len === 0 ? 'Entre 8 y 64 caracteres.' : len < 8 ? 'Te faltan ' + (8 - len) + ' caracteres para llegar al mínimo.' : 'Longitud correcta. Ya puedes crear tu cuenta.'; }
+
+  input.addEventListener('input', () => {
+    const length = input.value.length;
+
+    count.textContent = length + ' de 64 caracteres';
+    bar.style.width = Math.min(length / 8, 1) * 100 + '%';
+
+    const hint = document.getElementById('passHint');
+
+    if (hint) {
+      hint.textContent = length === 0
+        ? 'Entre 8 y 64 caracteres.'
+        : length < 8
+          ? 'Te faltan ' + (8 - length) + ' caracteres para llegar al mínimo.'
+          : 'Longitud correcta. Ya puedes crear tu cuenta.';
+    }
   });
 })();
