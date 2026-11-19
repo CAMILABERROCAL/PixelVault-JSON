@@ -169,9 +169,9 @@
         "secundaria"
       ],
       "direccion": "Av. Micaela Bastidas s/n, sector 2",
-      "imagenUrl": "",
-      "facebookUrl": "",
-      "googleMapsUrl": "",
+      "imagenUrl": "./img/jorge-basadre-ves.png",
+      "facebookUrl": "https://www.facebook.com/groups/222132301154457/community_help/?page_source=community_help_tab&locale=es_LA",
+      "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=I.E.+6048+Jorge+Basadre%2C+Av.+Micaela+Bastidas+s%2Fn%2C+sector+2%2C+Villa+El+Salvador%2C+Lima%2C+Per%C3%BA",
       "telefono": null,
       "turno": null,
       "descripcion": "I.E. 6048 Jorge Basadre, institución de gestión pública en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
@@ -179,7 +179,8 @@
       "referenciaEquipo": "https://www.google.com/search?kgmid=%2Fg%2F12j4nj4r0",
       "fuentes": [
         "https://identicole.minedu.gob.pe/colegio/mi_colegio/06431480"
-      ]
+      ],
+      "facebookTipo": "grupo"
     },
     {
       "id": "ie6063",
