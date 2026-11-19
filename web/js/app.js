@@ -26,7 +26,7 @@ function direccionColegio(c) {
 }
 function recuadroTelefono(numero) {
   if (!/^\d{7,15}$/.test(numero || '')) return '';
-  const visible = numero.replace(/^(9\d{2})(\d{3})(\d{3})$/, '$1 $2 $3');
+  const visible = numero.replace(/^(01)(\d{7})$/, '($1) $2').replace(/^(9\d{2})(\d{3})(\d{3})$/, '$1 $2 $3');
   return `<div><strong>Teléfono</strong><a href="tel:${numero}">${visible}</a></div>`;
 }
 function filtros() {return {texto:$('#search').value,gestion:$('#gestion').value,nivel:$('#nivel').value,orden:$('#sort').value};}
