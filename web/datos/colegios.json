@@ -215,9 +215,9 @@
         "secundaria"
       ],
       "direccion": "Calle Santa Rosa s/n, sector 2",
-      "imagenUrl": "",
-      "facebookUrl": "",
-      "googleMapsUrl": "",
+      "imagenUrl": "./img/ie6065-peru-inglaterra.png",
+      "facebookUrl": "https://www.facebook.com/groups/177370992323059?locale=es_LA",
+      "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=I.E.+6065+Per%C3%BA+Inglaterra%2C+Calle+Santa+Rosa+s%2Fn%2C+sector+2%2C+Villa+El+Salvador%2C+Lima%2C+Per%C3%BA",
       "telefono": null,
       "turno": null,
       "descripcion": "I.E. 6065 Perú Inglaterra, institución de gestión pública en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
@@ -226,7 +226,8 @@
       "fuentes": [
         "https://identicole.minedu.gob.pe/colegio/mi_colegio/04818530",
         "https://cdn.www.gob.pe/uploads/document/file/6589841/4999005-ver-oficio-multiple-305-2024-minedu-vmgi-drelm-ugel01-dir-agebre-convocatoria-ii-taller-de-fortalecimiento-a-profesores-de-innovacion-pedagogica-en-flipped-classroom-integracion-de-las-herramientas-digitales-en-el-aula-plataformas-de-aprendizaje-en-linea-05-07-2024.pdf?v=1720217173"
-      ]
+      ],
+      "facebookTipo": "grupo"
     }
   ]
 }
