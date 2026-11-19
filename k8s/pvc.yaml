@@ -1,3 +1,5 @@
+# PersistentVolumeClaim para conservar la persistencia de datos JSON
+
 # Volumen para conservar los archivos JSON entre recreaciones de Pods.
 apiVersion: v1
 kind: PersistentVolumeClaim
