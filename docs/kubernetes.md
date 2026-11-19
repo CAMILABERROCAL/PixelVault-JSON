@@ -140,3 +140,8 @@ El PVC y el Secret permanecen. **No borrar el PVC** si se quieren conservar los 
 ## Nota para la exposición
 
 > Utilizamos Kubernetes dentro de Docker Desktop para desplegar la aplicación completa. El Deployment administra un Pod con el contenedor de Spring Boot, el Service permite acceder a él y un volumen persistente conserva los datos JSON. Verificamos el estado del Pod y comprobamos que la aplicación responde por HTTP. La demostración local de Kubernetes es independiente de GitHub Pages.
+
+## Comandos rápidos de verificación
+- `kubectl get pods` — Verifica que el pod esté en estado `Running`.
+- `kubectl get svc` — Comprueba el puerto expuesto del servicio.
+- `kubectl get pvc` — Confirma que el volumen persistente esté en estado `Bound`.
