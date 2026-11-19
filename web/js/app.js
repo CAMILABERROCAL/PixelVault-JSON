@@ -30,13 +30,29 @@ function recuadroTelefono(numero) {
   return `<div><strong>Teléfono</strong><a href="tel:${numero}">${visible}</a></div>`;
 }
 function filtros() {return {texto:$('#search').value,gestion:$('#gestion').value,nivel:$('#nivel').value,orden:$('#sort').value};}
+function tarjetaColegio(c, orden) {
+  const publico = c.gestion === 'publico';
+  const coincidencia = orden === 'ranking'
+    ? `<p class="match">${c.coincidencia.total ? `${c.coincidencia.aciertos} de ${c.coincidencia.total} criterios coinciden` : 'Selecciona tus preferencias'}</p>` : '';
+  const niveles = c.niveles.length ? c.niveles.map(n => etiquetas[n]) : ['Niveles por confirmar'];
+  return `<article class="card card--${publico ? 'publico' : 'privado'}">
+    <div class="card-top">${imagenColegio(c)}</div>
+    <div class="card-content">
+      <div class="card-meta"><span class="badge">${publico ? 'Público' : 'Privado'}</span><span class="sede">${escapeHTML(c.sede)}</span></div>
+      ${coincidencia}<h3>${escapeHTML(c.nombre)}</h3>
+      <p class="address">${direccionColegio(c)}</p>
+      <div class="tags">${niveles.map(n => `<span class="tag">${escapeHTML(n)}</span>`).join('')}</div>
+      <button type="button" class="detail-button" data-detail="${escapeHTML(c.id)}" aria-label="Ver ficha de ${escapeHTML(c.nombre)}">Ver ficha del colegio</button>
+    </div>
+  </article>`;
+}
 function render() {
   const f = filtros();
   $('#rankingNote').hidden = f.orden !== 'ranking';
   document.querySelectorAll('[data-quick]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.quick === 'todos' ? !f.gestion && !f.nivel : f.gestion === b.dataset.quick && !f.nivel)));
   const lista = ColegiosCore.seleccionar(catalogo,f);
   $('#count').textContent = `${lista.length} ${lista.length===1?'opción disponible':'opciones disponibles'} en nuestro catálogo inicial`;
-  $('#cards').innerHTML = lista.length ? lista.map(c=>`<article class="card"><div class="card-top"><span class="badge">${c.gestion==='publico'?'PÚBLICO':'PRIVADO'}</span>${imagenColegio(c)}</div><div class="card-content">${f.orden==='ranking'?`<p class="match">${c.coincidencia.total?`${c.coincidencia.aciertos} de ${c.coincidencia.total} criterios coinciden`:'Selecciona tus preferencias'}</p>`:''}<h3>${escapeHTML(c.nombre)}</h3><p class="sede">${escapeHTML(c.sede)}</p><p class="address">⌖ ${direccionColegio(c)}</p><div class="tags">${c.niveles.length?c.niveles.map(n=>`<span class="tag">${escapeHTML(etiquetas[n])}</span>`).join(''):'<span class="tag">Niveles por confirmar</span>'}</div><button class="detail-button" data-detail="${escapeHTML(c.id)}">Ver información <span aria-hidden="true">↗</span></button></div></article>`).join('') : '<div class="empty"><h3>No encontramos coincidencias</h3><p>Prueba otro nombre o limpia los filtros.</p><button class="primary" id="emptyClear">Limpiar filtros</button></div>';
+  $('#cards').innerHTML = lista.length ? lista.map(c => tarjetaColegio(c, f.orden)).join('') : '<div class="empty"><h3>No encontramos coincidencias</h3><p>Prueba otro nombre o limpia los filtros.</p><button class="primary" id="emptyClear">Limpiar filtros</button></div>';
   if ($('#emptyClear')) $('#emptyClear').onclick=limpiar;
   prepararImagenes($('#cards'));
 }
