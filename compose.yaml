@@ -11,5 +11,13 @@ services:
       - pixelvault_datos:/app/datos
     restart: unless-stopped
 
+  ranking-colegios:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    ports:
+      - "8082:80"
+    restart: unless-stopped
+
 volumes:
   pixelvault_datos:
