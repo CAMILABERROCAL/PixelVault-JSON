@@ -1,3 +1,11 @@
+# Colegio Cerca · Villa El Salvador
+
+Directorio de colegios públicos y privados de Villa El Salvador. Permite consultar su ubicación y filtrar por gestión y nivel educativo.
+
+**[Abrir el directorio en Render](https://colegio-cerca-ves.onrender.com/)**
+
+## Antecedentes del repositorio
+
 <div align="center">
 
 # 🎮 PIXELVAULT
