@@ -193,9 +193,9 @@
         "secundaria"
       ],
       "direccion": "Av. El Sol, grupo 6, sector 2",
-      "imagenUrl": "",
-      "facebookUrl": "",
-      "googleMapsUrl": "",
+      "imagenUrl": "./img/ie6063-mariategui.png",
+      "facebookUrl": "https://www.facebook.com/ie6063?locale=es_LA",
+      "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=I.E.+6063+Jos%C3%A9+Carlos+Mari%C3%A1tegui%2C+Av.+El+Sol%2C+grupo+6%2C+sector+2%2C+Villa+El+Salvador%2C+Lima%2C+Per%C3%BA",
       "telefono": null,
       "turno": null,
       "descripcion": "I.E. 6063 José Carlos Mariátegui, institución de gestión pública en Villa El Salvador. Consulta con el colegio los grados, turnos, servicios y vacantes disponibles.",
