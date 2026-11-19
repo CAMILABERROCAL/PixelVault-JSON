@@ -81,3 +81,20 @@ docker compose down
 Antes de ejecutar el aplicativo, se debe verificar que Docker Desktop esté iniciado y que las variables de entorno requeridas estén configuradas.
 
 Los puertos y servicios disponibles dependen de la configuración definida en `compose.yaml`.
+
+
+## 7. Evidencias de funcionamiento
+
+### Evidencia 1. Página principal del ranking
+
+Se comprobó que la página ColegioCerca carga correctamente desde Docker mediante http://localhost:8082.
+
+![Página principal del ranking](evidencias-docker/01-pagina-principal.png)
+
+
+### Evidencia 2. Construcción y ejecución con Docker
+
+Se ejecutaron los comandos de construcción e inicio del servicio. La terminal confirmó que la imagen fue construida y que el contenedor ranking-colegios se encuentra en ejecución.
+
+![Docker funcionando](evidencias-docker/02-docker-funcionando.png)
+  
