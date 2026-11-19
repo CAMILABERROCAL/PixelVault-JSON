@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Tu carrito | PixelVault</title>
+  <title>Mi selección de libros | AulaLibro</title>
 
-  <link rel="icon" href="/img/icon.svg" type="image/svg+xml">
+  <link rel="icon" href="/img/aulalibro.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/css/estilos.css">
 
   <script src="/js/script.js" defer></script>
@@ -17,22 +17,22 @@
   <header>
     <nav class="nav" aria-label="Navegación principal">
       <a class="brand" href="/index.html">
-        PIXEL<span>VAULT</span>
+        AULA<span>LIBRO</span>
       </a>
 
       <div class="nav-links">
-        <a href="/index.html#catalogo">Catálogo</a>
+        <a href="/index.html#catalogo">Catálogo de libros</a>
 
-        <a href="/carrito.html">
-          Carrito <span class="count" id="cartCount">0</span>
+        <a href="/carrito.html" aria-current="page">
+          Mi selección <span class="count" id="cartCount">0</span>
         </a>
 
         <a href="/pedidos.html" id="ordersLink" hidden>
-          Mis pedidos
+          Mis préstamos
         </a>
 
         <a href="/login.html?next=admin" id="adminLink">
-          Administración
+          Biblioteca
         </a>
 
         <span class="user" id="userName"></span>
@@ -45,12 +45,13 @@
   </header>
 
   <main class="wrap">
-    <div class="eyebrow">Tu selección</div>
+    <div class="eyebrow">Biblioteca escolar</div>
 
-    <h1 class="page-title">Tu próxima aventura, lista.</h1>
+    <h1 class="page-title">Mi selección de libros</h1>
 
     <p class="muted">
-      Revisa tus juegos antes de continuar al pago.
+      Revisa los libros que quieres solicitar en préstamo.
+      Puedes quitar un libro o vaciar tu selección antes de continuar.
     </p>
 
     <div id="cartError" role="alert"></div>
@@ -60,18 +61,16 @@
         type="button"
         id="clearCartBtn"
         class="ghost danger"
+        aria-controls="cartView"
       >
-        Vaciar carrito
+        Vaciar selección
       </button>
     </div>
 
-    <div id="cartView"></div>
+    <div id="cartView" aria-live="polite"></div>
   </main>
 
-  <footer>
-    PIXELVAULT · Proyecto académico · Precios en soles ·
-    Los pagos son simulados, sin cargos reales.
-  </footer>
+  <footer>AULALIBRO · Biblioteca escolar · Un libro, muchas posibilidades.</footer>
 
   <div id="toast" role="status" hidden></div>
 </body>

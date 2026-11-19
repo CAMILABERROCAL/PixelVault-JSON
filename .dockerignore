@@ -1,7 +1,23 @@
-target
-.git
-datos
+# Archivos generados por Maven
+target/
+
+# Archivos de control de versiones
+.git/
+
+# Datos locales del aplicativo
+datos/
+
+# Variables de entorno y credenciales
 .env
-.idea
-.vscode
+.env.*
+!.env.example
+
+# Configuraciones de los editores
+.idea/
+.vscode/
+*.iml
+
+# Archivos temporales
 *.log
+*.tmp
+.DS_Store
