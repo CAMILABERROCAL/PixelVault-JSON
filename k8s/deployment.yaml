@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pixelvault
+  labels:
+    app: pixelvault
+spec:
+  replicas: 1
+  # JsonStore usa un bloqueo exclusivo sobre tienda.lock.
+  # Recreate evita dos Pods escribiendo simultaneamente en el mismo JSON.
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: pixelvault
+  template:
+    metadata:
+      labels:
+        app: pixelvault
+    spec:
+      # El Dockerfile ejecuta Java como usuario no root.
+      # fsGroup permite escritura en el volumen si el driver lo admite.
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: pixelvault
+          image: pixelvault-k8s:v1
+          # Imagen construida localmente en Docker Desktop (sin registro remoto).
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 8081
+              protocol: TCP
+          env:
+            - name: PIXELVAULT_DATA_DIR
+              value: /app/datos
+            - name: PIXELVAULT_ADMIN_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: pixelvault-admin
+                  key: PIXELVAULT_ADMIN_EMAIL
+            - name: PIXELVAULT_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pixelvault-admin
+                  key: PIXELVAULT_ADMIN_PASSWORD
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: '1'
+              memory: 768Mi
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            periodSeconds: 5
+            failureThreshold: 36
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            periodSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            periodSeconds: 10
+            failureThreshold: 3
+          volumeMounts:
+            - name: data
+              mountPath: /app/datos
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: pixelvault-data

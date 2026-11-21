@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.*;
 
+// Controlador principal para la gestión de productos, catálogo y órdenes en PixelVault
 @RestController
 public class ShopController {
  private final JsonStore store; private final PasswordEncoder encoder;
